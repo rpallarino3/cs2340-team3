@@ -20,7 +20,6 @@ import cs2340.team3.model.Player;
         "/create", // POST 
         "/update/*", // PUT
         "/delete/*", // DELETE
-        "/game" //temp
     })
 public class PlayerServlet extends HttpServlet {
 
@@ -124,11 +123,12 @@ public class PlayerServlet extends HttpServlet {
     		players.get(i).changeNumArmies(armySize);
     	}
     	if(game==null) game = new Game(players);
+    	getServletContext().setAttribute("game",game);
     	request.setAttribute("game",game);
-    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/game.jsp");
-        dispatcher.forward(request, response);
-    	
-    	//response.sendRedirect("/riskT3/game");
+    	request.getSession().setAttribute("game",game);
+    	//RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/game.jsp");
+    	//dispatcher.forward(request, response);
+    	response.sendRedirect("/riskT3/game");
     }
 
 }

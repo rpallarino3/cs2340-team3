@@ -1,5 +1,7 @@
 package cs2340.team3.model;
 
+import java.util.LinkedList;
+
 /**
  * A player object for the implementation of the game Risk.
  * 

@@ -16,7 +16,7 @@
 <th>Player Name</th>
 </tr>
 
-<% for (int id=0;id<players.size() && id<6;id++) { %>
+<% for (Integer id: players.keySet()) { %>
 <% Player player = players.get(id); %>
 <tr>
 <form action="/riskT3/update/<%= id %>" method="POST">

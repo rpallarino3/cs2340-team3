@@ -44,12 +44,6 @@
           destdir="${build.home}/WEB-INF/classes">
         <classpath refid="compile.classpath"/>
     </javac>
-
-    <!-- Copy application resources -->
-    <copy  todir="${build.home}/WEB-INF/classes">
-      <fileset dir="${src.home}/resources"/>
-    </copy>
-
   </target>
 
   <target name="prepare" depends="compile">

@@ -28,10 +28,17 @@ public class Game {
         rand = new Random();
     this.players=players;
     this.territories=territories;
-        setTurnOrder(this.players);
+        setTurnOrder();
+  }
+  
+  public Game(ArrayList<Player> players) {
+	  turnOrder = new ArrayList<Player>();
+	  rand=new Random();
+	  this.players=players;
+	  setTurnOrder();
   }
     
-    private void setTurnOrder(ArrayList<Player> players) {
+    private void setTurnOrder() {
         int random;
         while (players.size() != 0) {
             random = rand.nextInt(players.size());

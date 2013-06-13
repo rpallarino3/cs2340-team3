@@ -1,7 +1,8 @@
 package cs2340.team3.controller;
 
-import java.io.IOException;
+import java.io.IOException; 	
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.TreeMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,15 +13,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import cs2340.team3.model.Player;
 
+@SuppressWarnings("serial")
 @WebServlet(urlPatterns={
         "/players", // GET
         "/create", // POST 
         "/update/*", // PUT
         "/delete/*" // DELETE
     })
-public class GameServlet extends HttpServlet {
+public class PlayerServlet extends HttpServlet {
 
-    TreeMap<Integer, Player> players = new TreeMap<>();
+ 
+	ArrayList<Player> players = new ArrayList<>();
 
     @Override
     protected void doPost(HttpServletRequest request,
@@ -42,17 +45,12 @@ public class GameServlet extends HttpServlet {
             doDelete(request, response);
         } else {
             String name = request.getParameter("name");
-            if(players.size()<6)
-            	players.put(players.size(), new Player(name));
+            if(players.size()<6) {
+            	players.add(players.size(), new Player(name));
+            }
             
-            System.out.println(players.get(0));
-            System.out.println(players.get(1));
-            System.out.println(players.get(2));
-            System.out.println(players.get(3));
-            System.out.println(players.get(4));
-            System.out.println(players.get(5));
-            System.out.println(players.get(6));
-            System.out.println(players.get(7));
+            for(int i=0; i<players.size(); i++) 
+			System.out.println(players.get(i).getName());
             
             
             request.setAttribute("players", players);
@@ -82,7 +80,7 @@ public class GameServlet extends HttpServlet {
         System.out.println("In doPut()");
         String name = (String) request.getParameter("name");
         int id = getId(request);
-        players.put(id, new Player(name));
+        players.set(id, new Player(name));
         request.setAttribute("players", players);
         RequestDispatcher dispatcher = 
             getServletContext().getRequestDispatcher("/players.jsp");

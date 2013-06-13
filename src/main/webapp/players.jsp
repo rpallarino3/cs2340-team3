@@ -15,7 +15,6 @@
 <tr>
 <th>Player Name</th>
 </tr>
-
 <% for (Player player: players) { %>
 <% int id=players.indexOf(player); %>
 <tr>
@@ -41,7 +40,15 @@
 </form>
 <td></td> <!-- empty cell to align with previous cells -->
 </tr>
+
 </table>
+
+<% if(players.size()>=3) { %>
+<form action="/riskT3/players" method="POST">
+	<input type="hidden" name="operation" value="submit"/>
+ 	<input type="submit" value="Start Playing!"/>
+</form>
+<% } %>
 
 </body>
 </html>

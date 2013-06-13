@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cs2340.team3.model.Game;
 import cs2340.team3.model.Player;
 
 @SuppressWarnings("serial")
@@ -18,13 +19,15 @@ import cs2340.team3.model.Player;
         "/players", // GET
         "/create", // POST 
         "/update/*", // PUT
-        "/delete/*" // DELETE
+        "/delete/*", // DELETE
+        "/game" //temp
     })
 public class PlayerServlet extends HttpServlet {
 
  
 	ArrayList<Player> players = new ArrayList<>();
-
+	Game game = null;
+	
     @Override
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response)
@@ -43,9 +46,15 @@ public class PlayerServlet extends HttpServlet {
         } else if (operation.equalsIgnoreCase("DELETE")) {
             System.out.println("Delegating to doDelete().");
             doDelete(request, response);
-        } else {
+        } 
+        else if(operation.equalsIgnoreCase("submit")) {
+        	
+        	doSumbit(request, response);
+        }
+        else {
             String name = request.getParameter("name");
-            if(players.size()<6) {
+            
+            if(players.size()<6 && !(name.isEmpty())) {
             	players.add(players.size(), new Player(name));
             }
             
@@ -104,6 +113,22 @@ public class PlayerServlet extends HttpServlet {
         // Strip off the leading slash, e.g. "/2" becomes "2"
         String idStr = uri.substring(1, uri.length()); 
         return Integer.parseInt(idStr);
+    }
+    
+    protected void doSumbit(HttpServletRequest request,
+    						HttpServletResponse response)
+    		throws IOException, ServletException {
+    	
+    	int armySize=40- (players.size()-2) * 5;
+    	for(int i=0; i<players.size(); i++) {
+    		players.get(i).changeNumArmies(armySize);
+    	}
+    	if(game==null) game = new Game(players);
+    	request.setAttribute("game",game);
+    	RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/game.jsp");
+        dispatcher.forward(request, response);
+    	
+    	//response.sendRedirect("/riskT3/game");
     }
 
 }

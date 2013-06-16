@@ -14,7 +14,7 @@ public class Game {
   
   private ArrayList<Player> players;
     private ArrayList<Player> turnOrder;
-  private Territory[] territories;
+  private ArrayList<Territory> territories;
     private Random rand;
   
   /**
@@ -23,19 +23,22 @@ public class Game {
    * @param players
    * @param territories
    */
-  public Game(ArrayList<Player> players, Territory[] territories) {
-        turnOrder = new ArrayList<Player>();
-        rand = new Random();
-    this.players=players;
-    this.territories=territories;
-        setTurnOrder();
-  }
-  
   public Game(ArrayList<Player> players) {
 	  turnOrder = new ArrayList<Player>();
 	  rand=new Random();
 	  this.players=players;
 	  setTurnOrder();
+	  
+	  territories.add(new Territory("Alaska"));
+	  territories.add(new Territory("Northwest"));
+	  territories.add(new Territory("Greenland"));
+	  territories.add(new Territory("Alberta"));
+	  territories.add(new Territory("Ontraio"));
+	  territories.add(new Territory("Eastern Canada"));
+	  territories.add(new Territory("West US"));
+	  territories.add(new Territory("East US"));
+	  territories.add(new Territory("Central America"));
+	  
   }
     
     private void setTurnOrder() {

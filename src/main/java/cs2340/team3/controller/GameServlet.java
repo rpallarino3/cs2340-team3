@@ -31,7 +31,8 @@ public class GameServlet extends HttpServlet {
                          HttpServletResponse response)
             throws IOException, ServletException {
         System.out.println("In doGet()");
-        game= (Game)request.getSession().getAttribute("game");
+        if (game==null)
+        	game= (Game)request.getSession().getAttribute("game");
         players=game.getPlayers();
         for(int i=0;i<players.size();i++)
         	System.out.println(players.get(i).getName());

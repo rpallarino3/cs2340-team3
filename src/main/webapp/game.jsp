@@ -6,7 +6,7 @@
 <% ArrayList<Player> players= game.getPlayers(); %>  
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="/riskT3/style.css">
 <title>Divide and Conquer</title>
 </head>
 
@@ -32,18 +32,18 @@
 		</div>
 
 		<div class="map">
-			<div style="margin-left: 20px; margin-top: 100px;"><a href="game">Alaska</a></div>
-			<div style="margin-left: 100px; margin-top: 100px;"><a href="game">Northwest</a></div>
-			<div style="margin-left: 250px; margin-top: 80px;"><a href="game">Greenland</a></div>
+			<div style="margin-left: 20px; margin-top: 100px;"><a href="/riskT3/game/Alaska">Alaska</a></div>
+			<div style="margin-left: 100px; margin-top: 100px;"><a href="/riskT3/game/Northwest">Northwest</a></div>
+			<div style="margin-left: 250px; margin-top: 80px;"><a href="/riskT3/game/Greenland">Greenland</a></div>
 			
-			<div style="margin-left: 100px; margin-top: 150px;"><a href="game">Alberta</a></div>
-			<div style="margin-left: 180px; margin-top: 160px;"><a href="game">Ontario</a></div>
-			<div style="margin-left: 250px; margin-top: 145px;"><a href="game">Eastern Canada</a></div>
+			<div style="margin-left: 100px; margin-top: 150px;"><a href="/riskT3/game/Alberta">Alberta</a></div>
+			<div style="margin-left: 180px; margin-top: 160px;"><a href="/riskT3/game/Ontario">Ontario</a></div>
+			<div style="margin-left: 250px; margin-top: 145px;"><a href="/riskT3/game/EasternCanada">Eastern Canada</a></div>
 
-			<div style="margin-left: 100px; margin-top: 200px;"><a href="game">West US</a></div>
-			<div style="margin-left: 190px; margin-top: 220px;"><a href="game">East US</a></div>
+			<div style="margin-left: 100px; margin-top: 200px;"><a href="/riskT3/game/WestUS">West US</a></div>
+			<div style="margin-left: 190px; margin-top: 220px;"><a href="/riskT3/game/EastUS">East US</a></div>
 
-			<div style="margin-left: 100px; margin-top: 250px;"><a href="game">Central America</a></div>
+			<div style="margin-left: 100px; margin-top: 250px;"><a href="/riskT3/game/CentralAmerica">Central America</a></div>
 		</div>
 	</div>
 

@@ -1,6 +1,7 @@
 package cs2340.team3.model;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
+import java.util.Hashtable;
 import java.util.Random;
 
 
@@ -13,29 +14,33 @@ import java.util.Random;
 public class Game {
   
   private ArrayList<Player> players;
-    private ArrayList<Player> turnOrder;
-  private Territory[] territories;
-    private Random rand;
-  
+  private ArrayList<Player> turnOrder;
+  private Hashtable<String,Territory> territories;
+  private Random rand;
+  public static final int TERRITORIES=9;
+  private int turn=0;
   /**
    * Creates a Game object with a certain number of players and territories.
    * 
    * @param players
    * @param territories
    */
-  public Game(ArrayList<Player> players, Territory[] territories) {
-        turnOrder = new ArrayList<Player>();
-        rand = new Random();
-    this.players=players;
-    this.territories=territories;
-        setTurnOrder();
-  }
-  
   public Game(ArrayList<Player> players) {
 	  turnOrder = new ArrayList<Player>();
 	  rand=new Random();
 	  this.players=players;
 	  setTurnOrder();
+	  territories=new Hashtable<String,Territory>();
+	  
+	  territories.put("Alaska",new Territory("Alaska"));
+	  territories.put("Northwest",new Territory("Northwest"));
+	  territories.put("Greenland",new Territory("Greenland"));
+	  territories.put("Alberta",new Territory("Alberta"));
+	  territories.put("Ontario",new Territory("Ontario"));
+	  territories.put("EasternCanada",new Territory("Eastern Canada"));
+	  territories.put("WestUS",new Territory("West US"));
+	  territories.put("EastUS",new Territory("East US"));
+	  territories.put("CentralAmerica",new Territory("Central America"));
   }
     
     private void setTurnOrder() {
@@ -51,4 +56,18 @@ public class Game {
     public ArrayList<Player> getPlayers() {
         return players;
     }
+
+	public Hashtable<String,Territory> getTerritories() {
+		return territories;
+	}
+	
+	public Player getCurrentPlayer() {
+		return players.get(turn);
+	}
+	
+	public void nextTurn() {
+		turn++;
+		if(turn>=players.size())
+			turn=0;
+	}
 }

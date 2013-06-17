@@ -1,10 +1,8 @@
 package cs2340.team3.controller;
 
-import java.io.IOException; 	
-import java.io.PrintWriter;
+import java.io.IOException; 	 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.TreeMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +21,7 @@ public class GameServlet extends HttpServlet {
  
 	private Game game;
 	private ArrayList<Player> players;
-	private int territoriesLeft=game.TERRITORIES;
+	private int territoriesLeft=Game.TERRITORIES;
 	private Hashtable<String, Territory> territories;
 	
 
@@ -39,12 +37,22 @@ public class GameServlet extends HttpServlet {
         //if the game hasn't been set yet.
         if (game==null) {
         	initialGame(request);
+        	game.setStage(Game.PICK);
         }
         
-        //if there are still territories left to assign
-        else if(territoriesLeft!=0) {
+        else if(game.getStage()==Game.PICK) {
         	pickTerritories(request);
+        	System.out.println(game.getCurrentPlayer().getName()+
+        			", please pick a territory!");
         }
+        
+        
+        else if(game.getStage()==Game.INITIAL_REINFORCE) {
+        	//TODO
+        	System.out.println(game.getCurrentPlayer().getName()+
+        			", please reinforce your territories!");
+        }
+        
         
         //forward the request
         forward(request,response);
@@ -62,8 +70,9 @@ public class GameServlet extends HttpServlet {
     	game= (Game)request.getSession().getAttribute("game");
     	players=game.getPlayers();
     	territories=game.getTerritories();
-    	for(int i=0;i<players.size();i++)
-    		System.out.println(players.get(i).getName());
+    	System.out.println("Time to pick your territories!");
+    	System.out.println(game.getCurrentPlayer().getName()+
+    			", please pick a territory!");
     }
     
     /**
@@ -74,15 +83,28 @@ public class GameServlet extends HttpServlet {
      * @param request
      */
     private void pickTerritories(HttpServletRequest request) {
+    	//gets the name of the territory, used in the hash map
     	String territoryName=request.getPathInfo();
-    	System.out.println(territoryName);
     	territoryName=territoryName.substring(1,territoryName.length());
     	Territory territory = territories.get(territoryName);
+    	
+    	//if the territory doesn't belong to anyone
     	if (territory.getPlayerOwned()==null) {
     		territory.setPlayerOwned(game.getCurrentPlayer());
+    		System.out.println(territoryName+" was taken by "+
+    				game.getCurrentPlayer().getName()+"!");
     		game.nextTurn();
     		territoriesLeft--;
-    		System.out.println(territory.getPlayerOwned().getName());
+    	}
+    	
+    	//if there are no more territories to assign
+    	if(territoriesLeft==0) {
+    		game.setStage(Game.INITIAL_REINFORCE);
+    		game.resetTurn();
+    		
+    		//this is what would be printed to the console once it's created
+    		System.out.println("All territories have been conquered! " + 
+    				game.getCurrentPlayer().getName()+", please reinforce your armies!");
     	}
     }
     

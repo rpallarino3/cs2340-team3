@@ -1,6 +1,6 @@
 package cs2340.team3.model;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;  
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -14,11 +14,20 @@ import java.util.Random;
 public class Game {
   
   private ArrayList<Player> players;
-  private ArrayList<Player> turnOrder;
   private Hashtable<String,Territory> territories;
-  private Random rand;
-  public static final int TERRITORIES=9;
   private int turn=0;
+  private int stage; //please read java doc on setstage()
+  
+  
+  public static final int TERRITORIES=9; //number of territories in the game
+  
+  //possible stages of the game
+  public static final int PICK=0;
+  public static final int INITIAL_REINFORCE=1;
+  public static final int REINFORCE=2;
+  public static final int ATTACK=3;
+  public static final int FORTIFY=4;
+  
   /**
    * Creates a Game object with a certain number of players and territories.
    * 
@@ -26,8 +35,6 @@ public class Game {
    * @param territories
    */
   public Game(ArrayList<Player> players) {
-	  turnOrder = new ArrayList<Player>();
-	  rand=new Random();
 	  this.players=players;
 	  setTurnOrder();
 	  territories=new Hashtable<String,Territory>();
@@ -44,6 +51,8 @@ public class Game {
   }
     
     private void setTurnOrder() {
+    	Random rand= new Random();
+    	ArrayList<Player> turnOrder=new ArrayList<Player>();
         int random;
         while (players.size() != 0) {
             random = rand.nextInt(players.size());
@@ -65,9 +74,41 @@ public class Game {
 		return players.get(turn);
 	}
 	
+	/**
+	 * @return the stage
+	 */
+	public int getStage() {
+		return stage;
+	}
+
+	/**
+	 * Possible stages are :
+	 * PICK
+	 * INITIAL_REINFORCE
+	 * REINFORCE
+	 * ATTACK
+	 * FORTIFY
+	 * 
+	 * @param stage the stage to set
+	 * @throws Exception 
+	 */
+	public void setStage(int stage){
+		this.stage=stage;
+	}
+	
+	/**
+	 * Goes to the next Person's turn.
+	 */
 	public void nextTurn() {
 		turn++;
 		if(turn>=players.size())
 			turn=0;
+	}
+	
+	/**
+	 * Resets whose turn it is back to player 1.
+	 */
+	public void resetTurn() {
+		this.turn=0;
 	}
 }

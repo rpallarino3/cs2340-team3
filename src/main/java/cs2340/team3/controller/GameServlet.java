@@ -90,7 +90,12 @@ public class GameServlet extends HttpServlet {
     	
     	//if the territory doesn't belong to anyone
     	if (territory.getPlayerOwned()==null) {
+    		
     		territory.setPlayerOwned(game.getCurrentPlayer());
+    		territory.changeNumArmies(1);
+    		territory.getPlayerOwned().changeNumArmies(-1);
+    		territory.getPlayerOwned().changeNumTerritories(1);
+    		
     		System.out.println(territoryName+" was taken by "+
     				game.getCurrentPlayer().getName()+"!");
     		game.nextTurn();

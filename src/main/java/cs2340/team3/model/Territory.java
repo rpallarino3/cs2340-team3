@@ -53,31 +53,6 @@ public class Territory {
 		numArmies+=num;
 	}
     
-    /**
-    * Add armies to the armies currently occupying the territory.
-    *
-    * @param armiesToAdd the armies to add to the territory
-    */
-    public void addArmies(int armiesToAdd) {
-        numArmies+=armiesToAdd;
-    }
-    
-    /**
-    * Subtract armies from the armies currently occupying the territory.
-    *
-    * @param armiesToSubtract the armies to subtract from the territory
-    * @return int 1 if successful, 0 if not
-    */
-    public int subtractArmies(int armiesToSubtract) {
-        if (armiesToSubtract >= numArmies) {
-            numArmies-=armiesToSubtract;
-            return 1;
-        }
-        else {
-            //display message that you don't have that many armies in that territory
-            return 0;
-        }
-    }
 	
 	/**
 	 * 
@@ -95,14 +70,8 @@ public class Territory {
     */
     public void moveArmies(Territory t, int armiesToMove) {
         if (adjacentTerritories.contains(t)) {
-            int successful = subtractArmies(armiesToMove);
-            if (successful == 1) {
-                t.addArmies(armiesToMove);
-            }
-            else {
-                //say something about moving too many armies
-            }
-            
+            changeNumArmies(-armiesToMove);
+            t.changeNumArmies(armiesToMove);
         }
         else {
             // say something about not being able to move to that territory

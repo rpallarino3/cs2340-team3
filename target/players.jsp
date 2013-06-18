@@ -1,8 +1,8 @@
-<%@ page import="cs2340.team3.model.Player" %>
+<%@ page import="model.Player" %>
 <%@ page import="java.util.*" %>
 
-<% TreeMap<Integer, Player> players = 
-   (TreeMap<Integer, Player>) request.getAttribute("players"); %>
+<% ArrayList<Player> players = 
+   (ArrayList<Player>) request.getAttribute("players"); %>
 
 <html>
 <head>
@@ -15,9 +15,8 @@
 <tr>
 <th>Player Name</th>
 </tr>
-
-<% for (Integer id: players.keySet()) { %>
-<% Player player = players.get(id); %>
+<% for (Player player: players) { %>
+<% int id=players.indexOf(player); %>
 <tr>
 <form action="/riskT3/update/<%= id %>" method="POST">
   <!-- hidden operation element to simulate HTTP PUT method in server -->
@@ -34,6 +33,7 @@
  </td>
 </tr>
 <% } %>
+<% if(players.size() < 6) { %>
 <tr>
 <form action="/riskT3/create" method="POST">
   <td><input type="text" name="name"/></td>
@@ -41,7 +41,15 @@
 </form>
 <td></td> <!-- empty cell to align with previous cells -->
 </tr>
+<% } %>
 </table>
+
+<% if(players.size()>=3) { %>
+<form action="/riskT3/players" method="POST">
+	<input type="hidden" name="operation" value="submit"/>
+ 	<input type="submit" value="Start Playing!"/>
+</form>
+<% } %>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-<%@ page import="cs2340.team3.model.Player" %>
+<%@ page import="model.Player" %>
 <%@ page import="java.util.*" %>
 
 <% ArrayList<Player> players = 
@@ -33,6 +33,7 @@
  </td>
 </tr>
 <% } %>
+<% if(players.size() < 6) { %>
 <tr>
 <form action="/riskT3/create" method="POST">
   <td><input type="text" name="name"/></td>
@@ -40,7 +41,7 @@
 </form>
 <td></td> <!-- empty cell to align with previous cells -->
 </tr>
-
+<% } %>
 </table>
 
 <% if(players.size()>=3) { %>

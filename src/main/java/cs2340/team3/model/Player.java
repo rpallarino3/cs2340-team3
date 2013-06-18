@@ -13,6 +13,7 @@ public class Player {
 	private String name;
 	private int armiesAvailable; // number of armies available to distribute
 	private int numTerritories;  // number of territories owned by the player
+	private String color="black";
 	
 	/**
 	 * The player starts with a specific amount of armies,
@@ -72,5 +73,19 @@ public class Player {
 	 */
 	public int getNumTerritories() {
 		return numTerritories;
+	}
+
+	/**
+	 * @return the color
+	 */
+	public String getColor() {
+		return color;
+	}
+
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(String color) {
+		this.color = color;
 	}
 }

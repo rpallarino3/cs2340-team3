@@ -3,9 +3,10 @@ package cs2340.team3.model;
 public class Territory {
 	
 	private String name;
-	private Player playerOwned; // the player who owns the army
-	private int numArmies;      // the number of armies that occupy the territory.
-	
+	private Player playerOwned; 
+	private int numArmies;      
+	private String style; //style tag for css based on
+	                      //game_board.jpg
 	/**
 	 * Creates a territory
 	 * 
@@ -13,6 +14,11 @@ public class Territory {
 	 */
 	public Territory(String name) {
 		this.name=name;
+	}
+	
+	public Territory(String name,String style) {
+		this.name=name;
+		this.style=style;
 	}
 	
 	/**
@@ -55,5 +61,19 @@ public class Territory {
 	 */
 	public int getNumArmies() {
 		return numArmies;
+	}
+
+	/**
+	 * @return the style
+	 */
+	public String getStyle() {
+		return style;
+	}
+
+	/**
+	 * @param style the style to set
+	 */
+	public void setStyle(String style) {
+		this.style = style;
 	}
 }

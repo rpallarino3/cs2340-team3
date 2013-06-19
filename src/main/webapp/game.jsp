@@ -1,4 +1,4 @@
-<%@ page import="java.model.*" %>
+<%@ page import="model.*" %>
 <%@ page import="java.util.*" %>
 
 <% Game game = (Game) request.getAttribute("game"); %>

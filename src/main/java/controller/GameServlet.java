@@ -1,6 +1,6 @@
-package java.controller;
+package controller;
 
-import java.io.IOException; 
+import java.io.IOException;  
 import java.util.ArrayList;
 import java.util.Hashtable;
 import javax.servlet.RequestDispatcher;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.model.*;
+import model.*;
 
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = { "/game", "/game/*" })

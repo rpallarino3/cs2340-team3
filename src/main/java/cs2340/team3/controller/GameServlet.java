@@ -23,6 +23,7 @@ public class GameServlet extends HttpServlet {
 	private ArrayList<Player> players;
 	private int territoriesLeft=Game.TERRITORIES;
 	private Hashtable<String, Territory> territories;
+    private int playersReinforcedCompletely = 0;
 	
 
     /**
@@ -48,9 +49,14 @@ public class GameServlet extends HttpServlet {
         
         
         else if(game.getStage()==Game.INITIAL_REINFORCE) {
-        	//TODO
-        	System.out.println(game.getCurrentPlayer().getName()+
-        			", please reinforce your territories!");
+            initialReinforce(request);
+            System.out.println(game.getCurrentPlayer().getName()+
+                        ", please reinforce your territories!");
+        }
+        
+        else if(game.getStage() == Game.ATTACK) {
+            System.out.println(game.getCurrentPlayer().getName() +
+                    ", choose which territory to attack!");
         }
         
         
@@ -100,6 +106,7 @@ public class GameServlet extends HttpServlet {
     				game.getCurrentPlayer().getName()+"!");
     		game.nextTurn();
     		territoriesLeft--;
+            System.out.println("There are " + territoriesLeft + " territories left.");
     	}
     	
     	//if there are no more territories to assign
@@ -111,6 +118,43 @@ public class GameServlet extends HttpServlet {
     		System.out.println("All territories have been conquered! " + 
     				game.getCurrentPlayer().getName()+", please reinforce your armies!");
     	}
+    }
+    
+    /**
+    * This should be looped through until all of the starting armies
+    * have been place on territories owned by the player placing the army.
+    *
+    * @param request
+    */
+    private void initialReinforce(HttpServletRequest request) {
+        if (game.getCurrentPlayer().getArmiesAvailable() != 0) {
+            String territoryName = request.getPathInfo();
+            territoryName = territoryName.substring(1, territoryName.length());
+            Territory territory = territories.get(territoryName);
+            if (territory.getPlayerOwned() == game.getCurrentPlayer()) {
+                territory.changeNumArmies(1);
+                territory.getPlayerOwned().changeNumArmies(-1);
+                System.out.println(game.getCurrentPlayer().getName() + ", has added an army to " +
+                        territory.getName());
+            }
+            else {
+                System.out.println("You do not own that territory.");
+                return;
+            }
+            if (game.getCurrentPlayer().getArmiesAvailable() == 0 &&
+                        game.getCurrentPlayer().getArmiesDistributed() == false) {
+                game.getCurrentPlayer().setArmiesDistributed(true);
+                playersReinforcedCompletely++;
+                System.out.println(playersReinforcedCompletely);
+            }
+            if (playersReinforcedCompletely == game.getPlayers().size()) {
+                game.setStage(Game.ATTACK);
+                game.resetTurn();
+                System.out.println("All armies have been distributed." + game.getCurrentPlayer().getName() +
+                        ", pick a territory to attack!");
+            }
+            game.nextTurn();
+        }       
     }
     
     /**

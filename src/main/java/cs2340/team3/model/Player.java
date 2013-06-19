@@ -13,6 +13,7 @@ public class Player {
 	private String name;
 	private int armiesAvailable; // number of armies available to distribute
 	private int numTerritories;  // number of territories owned by the player
+    private boolean armiesDistributed = false; // if all of the armies have been distributed
 	
 	/**
 	 * The player starts with a specific amount of armies,
@@ -73,4 +74,12 @@ public class Player {
 	public int getNumTerritories() {
 		return numTerritories;
 	}
+    
+    public boolean getArmiesDistributed() {
+        return armiesDistributed;
+    }
+    
+    public void setArmiesDistributed(boolean b) {
+        this.armiesDistributed = b;
+    }
 }

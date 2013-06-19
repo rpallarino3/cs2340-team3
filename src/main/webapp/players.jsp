@@ -1,4 +1,4 @@
-<%@ page import="cs2340.team3.model.Player" %>
+<%@ page import="model.Player" %>
 <%@ page import="java.util.*" %>
 
 <% ArrayList<Player> players = 

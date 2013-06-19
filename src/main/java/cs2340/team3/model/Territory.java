@@ -5,10 +5,9 @@ import java.util.ArrayList;
 public class Territory {
 	
 	private String name;
-	private Player playerOwned; // the player who owns the army
-	private int numArmies;      // the number of armies that occupy the territory.
-    private ArrayList<Territory> adjacentTerritories;
-	
+	private Player playerOwned;
+	private int numArmies;
+    private ArrayList<Territory> adjacentTerritories;     
 	/**
 	 * Creates a territory
 	 * 
@@ -18,6 +17,7 @@ public class Territory {
 		this.name=name;
         adjacentTerritories = new ArrayList<Territory>();
 	}
+	
 	
 	/**
 	 * This method is used to give this territory a different owner.
@@ -61,6 +61,7 @@ public class Territory {
 	public int getNumArmies() {
 		return numArmies;
 	}
+
     /**
     * Transfer armies between two adjacent territories
     *

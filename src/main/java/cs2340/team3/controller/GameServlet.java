@@ -43,6 +43,7 @@ public class GameServlet extends HttpServlet {
         
         else if(game.getStage()==Game.PICK) {
         	pickTerritories(request);
+        	if(game.getStage()==Game.INITIAL_REINFORCE)
         	System.out.println(game.getCurrentPlayer().getName()+
         			", please pick a territory!");
         }
@@ -50,7 +51,8 @@ public class GameServlet extends HttpServlet {
         
         else if(game.getStage()==Game.INITIAL_REINFORCE) {
             initialReinforce(request);
-            System.out.println(game.getCurrentPlayer().getName()+
+            if(game.getStage()==Game.INITIAL_REINFORCE) 
+            	System.out.println(game.getCurrentPlayer().getName()+
                         ", please reinforce your territories!");
         }
         
@@ -150,7 +152,7 @@ public class GameServlet extends HttpServlet {
             if (playersReinforcedCompletely == game.getPlayers().size()) {
                 game.setStage(Game.ATTACK);
                 game.resetTurn();
-                System.out.println("All armies have been distributed." + game.getCurrentPlayer().getName() +
+                System.out.println("All armies have been distributed. " + game.getCurrentPlayer().getName() +
                         ", pick a territory to attack!");
             }
             game.nextTurn();

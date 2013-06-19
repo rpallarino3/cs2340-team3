@@ -1,7 +1,6 @@
 package controller;
 
-import java.io.IOException;  
-import java.util.ArrayList;
+import java.io.IOException;   
 import java.util.Hashtable;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +16,6 @@ import model.*;
 public class GameServlet extends HttpServlet {
 
 	private Game game;
-	private ArrayList<Player> players;
 	private int territoriesLeft = Game.TERRITORIES;
 	private Hashtable<String, Territory> territories;
 	private int playersReinforcedCompletely = 0;
@@ -68,7 +66,6 @@ public class GameServlet extends HttpServlet {
 	 */
 	private void initialGame(HttpServletRequest request) {
 		game = (Game) request.getSession().getAttribute("game");
-		players = game.getPlayers();
 		territories = game.getTerritories();
 		System.out.println("Time to pick your territories!");
 		System.out.println(game.getCurrentPlayer().getName()

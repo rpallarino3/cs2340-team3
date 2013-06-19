@@ -1,4 +1,4 @@
-package cs2340.team3.etc;
+package etc;
 
 import java.util.ArrayList;
 

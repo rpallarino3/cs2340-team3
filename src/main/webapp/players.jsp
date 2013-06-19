@@ -35,10 +35,12 @@
 <% } %>
 <% if(players.size() < 6) { %>
 <tr>
+<%if (players.size() < 6) { %>
 <form action="/riskT3/create" method="POST">
   <td><input type="text" name="name"/></td>
   <td><input type="submit" value="Add"/></td>
 </form>
+<% } %>
 <td></td> <!-- empty cell to align with previous cells -->
 </tr>
 <% } %>

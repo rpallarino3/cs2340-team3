@@ -1,4 +1,4 @@
-package cs2340.team3.model;
+package model;
 
 import java.util.ArrayList;
 

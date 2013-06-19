@@ -14,6 +14,7 @@ public class Player {
 	private int armiesAvailable; // number of armies available to distribute
 	private int numTerritories;  // number of territories owned by the player
     private boolean armiesDistributed = false; // if all of the armies have been distributed
+	private String color="black";
 	
 	/**
 	 * The player starts with a specific amount of armies,
@@ -82,4 +83,18 @@ public class Player {
     public void setArmiesDistributed(boolean b) {
         this.armiesDistributed = b;
     }
+
+	/**
+	 * @return the color
+	 */
+	public String getColor() {
+		return color;
+	}
+
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(String color) {
+		this.color = color;
+	}
 }

@@ -14,6 +14,7 @@ import etc.RiskStatus;
 public class Game {
   
   private ArrayList<Player> players;
+  private RiskMapNetwork mapNetwork;
   private ArrayList<Territory> asia;
   private ArrayList<Territory> northAmerica;
   private ArrayList<Territory> southAmerica;
@@ -30,7 +31,7 @@ public class Game {
   
   private int territoriesLeft=TERRITORIES;
   private int playersReinforcedCompletely = 0;
-
+  
   
   //possible stages of the game
   public static final int PICK=0;
@@ -47,126 +48,21 @@ public class Game {
    * @param territories
    */
   public Game(ArrayList<Player> players) {
-	  this.players=players;
+	  this.players = players;
 	  setTurnOrder();
 	  setColor();
-	  territories=new Hashtable<String,Territory>();
-      initializeContinents();
-	  setNorthAmerica();
-	  setSouthAmerica();
-	  setEurope();
-	  setAfrica();
-	  setAsia();
-	  setAustralia();
+	  mapNetwork = new RiskMapNetwork();
+	  territories = mapNetwork.getTerritories();
+	  asia = mapNetwork.getAsia();
+	  northAmerica = mapNetwork.getNorthAmerica();
+	  southAmerica = mapNetwork.getSouthAmerica();
+	  australia = mapNetwork.getAustralia();
+	  europe = mapNetwork.getEurope();
+	  africa = mapNetwork.getAfrica();
 	  console=new RiskStatus();
 	  
   }
   
-  private void initializeContinents() {
-      asia = new ArrayList<Territory>();
-      northAmerica = new ArrayList<Territory>();
-      southAmerica = new ArrayList<Territory>();
-      australia = new ArrayList<Territory>();
-      europe = new ArrayList<Territory>();
-      africa = new ArrayList<Territory>();
-  }
-  
-  private void setNorthAmerica() {
-	  territories.put("Alaska",new Territory("Alaska",20,100));
-	  territories.put("Northwest",new Territory("Northwest",100,100));
-	  territories.put("Greenland",new Territory("Greenland",280,70));
-	  territories.put("Alberta",new Territory("Alberta",100,150));
-	  territories.put("Ontario",new Territory("Ontario",180,160));
-	  territories.put("EasternCanada",new Territory("Eastern Canada",250,145));
-	  territories.put("WestUS",new Territory("West US",100,200));
-	  territories.put("EastUS",new Territory("East US",190,220));
-	  territories.put("CentralAmerica",new Territory("Central America",100,250));
-      northAmerica.add(territories.get("Alaska"));
-      northAmerica.add(territories.get("Northwest"));
-      northAmerica.add(territories.get("Greenland"));
-      northAmerica.add(territories.get("Alberta"));
-      northAmerica.add(territories.get("Ontario"));
-      northAmerica.add(territories.get("EasternCanada"));
-      northAmerica.add(territories.get("WestUS"));
-      northAmerica.add(territories.get("EastUS"));
-      northAmerica.add(territories.get("CentralAmerica"));
-	  
-  }
-  
-  private void setSouthAmerica() {
-	  territories.put("Arawak", new Territory("Arawak",160,320));
-	  territories.put("Kariri", new Territory("Kariri",250,370));
-	  territories.put("Baniva", new Territory("Baniva",180,390));
-	  territories.put("Ika", new Territory("Ika",190,460));
-      southAmerica.add(territories.get("Arawak"));
-      southAmerica.add(territories.get("Kariri"));
-      southAmerica.add(territories.get("Baniva"));
-      southAmerica.add(territories.get("Ika"));
-  }
-  
-  private void setEurope() {
-	  
-	  territories.put("Sweden", new Territory("Sweden",380,100));
-	  territories.put("Britain", new Territory("Britain",340,160));
-	  territories.put("Germany", new Territory("Germany",380,180));
-	  territories.put("Ukraine", new Territory("Ukraine",450,170));
-	  territories.put("Spain", new Territory("Spain",330,220));
-	  territories.put("RomanEmpire", new Territory("Roman Empire",390,215));
-      europe.add(territories.get("Sweden"));
-      europe.add(territories.get("Britain"));
-      europe.add(territories.get("Germany"));
-      europe.add(territories.get("Ukraine"));
-      europe.add(territories.get("Spain"));
-      europe.add(territories.get("RomanEmpire"));
-  }
-  private void setAfrica() {
-	  territories.put("Egypt", new Territory("Egypt",400,290));
-	  territories.put("Dinka", new Territory("Dinka",350,340));
-	  territories.put("Xhosa", new Territory("Xhosa",430,350));
-	  territories.put("Ngbandi", new Territory("Ngbandi",390,405));
-	  territories.put("Sakalava", new Territory("Sakalava",395,470));
-      africa.add(territories.get("Egypt"));
-      africa.add(territories.get("Dinka"));
-      africa.add(territories.get("Xhosa"));
-      africa.add(territories.get("Ngbandi"));
-      africa.add(territories.get("Sakalava"));
-  }
-  
-  private void setAsia() {
-	  territories.put("Kurdish", new Territory("Kurdish",580,100));
-	  territories.put("Pashtun", new Territory("Pashtun",680,100));
-	  territories.put("Buryats", new Territory("Buryats",540,130));
-	  territories.put("Puyuma", new Territory("Puyuma",650,150));
-	  territories.put("Seediq", new Territory("Seediq",520,200));
-	  territories.put("Khakas", new Territory("Khakas",670,190));
-	  territories.put("China", new Territory("China",630,250));
-	  territories.put("MiddleEast", new Territory("Middle East",470,270));
-	  territories.put("India", new Territory("India",565,300));
-	  territories.put("Korea", new Territory("Korea",630,315));
-	  territories.put("Tuvans", new Territory("Tuvans",760,100));
-      asia.add(territories.get("Kurdish"));
-      asia.add(territories.get("Pashtun"));
-      asia.add(territories.get("Buryats"));
-      asia.add(territories.get("Puyuma"));
-      asia.add(territories.get("Seediq"));
-      asia.add(territories.get("Khakas"));
-      asia.add(territories.get("China"));
-      asia.add(territories.get("MiddleEast"));
-      asia.add(territories.get("India"));
-      asia.add(territories.get("Korea"));
-      asia.add(territories.get("Tuvans"));
-  }
-  
-  private void setAustralia() {
-	  territories.put("Singapore", new Territory("Singapore",650,380));
-	  territories.put("NewZealand", new Territory("New Zealand",730,380));
-	  territories.put("WesternAustralia", new Territory("Western Australia",610,470));
-	  territories.put("EasternAustralia", new Territory("Eastern Australia",730,450));
-	  australia.add(territories.get("Singapore"));
-      australia.add(territories.get("NewZealand"));
-      australia.add(territories.get("WesternAustralia"));
-      australia.add(territories.get("EasternAustralia"));
-  }
     
     private void setTurnOrder() {
     	Random rand= new Random();
@@ -279,15 +175,13 @@ public class Game {
 		            console.append(territory.getName() + " was taken by "
 		                    + getCurrentPlayer().getName() + "!");
 
+					//nextTurn();
 					territoriesLeft--;
 
 		            console.append("There are " + territoriesLeft
 		                    + " territories left.");
-					System.out.println("There are " + territoriesLeft
-							+ " territories left.");
-					
-					nextTurn();
-
+		
+                    nextTurn();
 				}
 
 				// if there are no more territories to assign
@@ -345,10 +239,10 @@ public class Game {
 		if (playersReinforcedCompletely == getPlayers().size()) {
 				setStage(REINFORCE);
 				resetTurn();
-				console.append("All armies have been distributed. "
-                        + " Let the game commence! " + getCurrentPlayer().getName() + 
+                console.append("All armies have been distributed."
+                        + " Let the game commence! " + getCurrentPlayer().getName() +
                         ", please reinforce your armies!");
-				awardArmies();
+                awardArmies();
 		} else {
 			
 			nextTurn();
@@ -372,6 +266,7 @@ public class Game {
             console.append(player.getName() + " has been awarded " + armiesToAdd + " armies!");
             player.changeNumArmies(armiesToAdd);
         
+
         addAustraliaArmies();
         addNorthAmericaArmies();
         addSouthAmericaArmies();
@@ -383,6 +278,7 @@ public class Game {
    
     private void addAustraliaArmies() {
     	Player player=getCurrentPlayer();
+
         boolean controlled = true;
         for (int i = 0; i < australia.size(); i++) {
             if (australia.get(i).getPlayerOwned() != player) {
@@ -390,7 +286,8 @@ public class Game {
             }
         }
         if (controlled) {
-            console.append(player.getName() + " has been awarded 2 extra armies for controlling Australia!");
+            
+        	console.append(player.getName() + " has been awarded 2 extra armies for controlling Australia!"); 
             player.changeNumArmies(2);
         }
     }
@@ -421,6 +318,7 @@ public class Game {
         }
         if (controlled) {
             console.append(player.getName() + " has been awarded 2 extra armies for controlling South America!");
+
             player.changeNumArmies(2);
         }
     }
@@ -442,7 +340,6 @@ public class Game {
     
     private void addAfricaArmies() {
     	Player player=getCurrentPlayer();
-
         boolean controlled = true;
         for (int i = 0; i < africa.size(); i++) {
             if (africa.get(i).getPlayerOwned() != player) {
@@ -479,14 +376,16 @@ public class Game {
             player.changeNumArmies(-1);
             territory.changeNumArmies(1);
             console.append(player.getName() + " has added an army to " + territory.getName() + "!");
+
         }
         else {
             console.append("You do not control that territory.");
         }
-        
+   
         if(getCurrentPlayer().getArmiesAvailable()==0) {
         	setStage(ATTACK);
         	console.append(player.getName() + " Attack a territory!");
+
         }
     }
 

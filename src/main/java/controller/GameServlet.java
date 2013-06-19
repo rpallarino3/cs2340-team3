@@ -74,6 +74,7 @@ public class GameServlet extends HttpServlet {
                
        }
 
+
 		else if (game.getStage() == Game.ATTACK) {
 			console.append(game.getCurrentPlayer().getName()
 					+ ", choose which territory to attack!");
@@ -81,6 +82,8 @@ public class GameServlet extends HttpServlet {
 		}
         
         else if (game.getStage() == Game.FORTIFY) {
+
+            //game.setArmiesAwarded(false);
             console.append("Fortify");
             game.setStage(Game.REINFORCE);
             game.nextTurn();

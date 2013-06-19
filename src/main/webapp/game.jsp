@@ -1,6 +1,4 @@
-<%@ page import="cs2340.team3.model.Player" %>
-<%@ page import="cs2340.team3.model.Game" %>
-<%@ page import="cs2340.team3.model.Territory" %>
+<%@ page import="java.model.*" %>
 <%@ page import="java.util.*" %>
 
 <% Game game = (Game) request.getAttribute("game"); %>

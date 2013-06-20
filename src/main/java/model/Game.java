@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;  
 import java.util.Hashtable;
 import java.util.Random;
-
+import etc.RiskStatus;
 
 /**
  * This is the implentation of the Risk-based game
@@ -17,9 +17,14 @@ public class Game {
   private Hashtable<String,Territory> territories;
   private int turn=0;
   private int stage; //please read java doc on setstage()
+  private RiskStatus console;
   
   
   public static final int TERRITORIES=39; //number of territories in the game
+  
+  private int territoriesLeft=TERRITORIES;
+  private int playersReinforcedCompletely = 0;
+
   
   //possible stages of the game
   public static final int PICK=0;
@@ -46,6 +51,7 @@ public class Game {
 	  setAfrica();
 	  setAsia();
 	  setAustralia();
+	  console=new RiskStatus();
 	  
   }
   
@@ -197,5 +203,94 @@ public class Game {
 	 */
 	public void resetTurn() {
 		this.turn=0;
+	}
+
+	/**
+	 * This should be looped through until there are no more territories left to
+	 * assign. This allows a player to click on a territory, and choose that
+	 * territory as their own.
+	 * 
+	 * @param territory
+	 */
+	public void pickTerritories(Territory territory) {
+		// if the territory doesn't belong to anyone
+				if (territory.getPlayerOwned() == null) {
+
+					territory.setPlayerOwned(getCurrentPlayer());
+					territory.changeNumArmies(1);
+					territory.getPlayerOwned().changeNumArmies(-1);
+					territory.getPlayerOwned().changeNumTerritories(1);
+		            
+		            console.append(territory.getName() + " was taken by "
+		                    + getCurrentPlayer().getName() + "!");
+
+					nextTurn();
+					territoriesLeft--;
+
+		            console.append("There are " + territoriesLeft
+		                    + " territories left.");
+					System.out.println("There are " + territoriesLeft
+							+ " territories left.");
+				}
+
+				// if there are no more territories to assign
+				if (territoriesLeft == 0) {
+					setStage(INITIAL_REINFORCE);
+					resetTurn();
+
+					// this is what would be printed to the console once it's created
+		            console.append("All territories have been conquered! "
+		                    + getCurrentPlayer().getName()
+		                    + ", please reinforce your armies!");
+				}
+		
+	}
+
+	/**
+	 * This should be looped through until all of the starting armies have been
+	 * place on territories owned by the player placing the army.
+	 * 
+	 * @param territory
+	 */
+	public void initialReinforce(Territory territory) {
+		if (getCurrentPlayer().getArmiesAvailable() != 0) {
+			
+			if (territory.getPlayerOwned() == getCurrentPlayer()) {
+				territory.changeNumArmies(1);
+				territory.getPlayerOwned().changeNumArmies(-1);
+
+                console.append(getCurrentPlayer().getName()
+                        + ", has added an army to " + territory.getName());
+				System.out.println(getCurrentPlayer().getName()
+						+ ", has added an army to " + territory.getName());
+			} else {
+                console.append("You do not own that territory.");
+				System.out.println("You do not own that territory.");
+				return;
+			}
+			if (getCurrentPlayer().getArmiesAvailable() == 0
+					&& getCurrentPlayer().getArmiesDistributed() == false) {
+				getCurrentPlayer().setArmiesDistributed(true);
+				playersReinforcedCompletely++;
+                console.append(playersReinforcedCompletely);
+				System.out.println(playersReinforcedCompletely);
+			}
+			if (playersReinforcedCompletely == getPlayers().size()) {
+				setStage(ATTACK);
+				resetTurn();
+                console.append("All armies have been distributed. "
+                        + getCurrentPlayer().getName()
+                        + ", pick a territory to attack!");
+				System.out.println("All armies have been distributed. "
+						+ getCurrentPlayer().getName()
+						+ ", pick a territory to attack!");
+			}
+			nextTurn();
+		}
+		
+	}
+
+	public RiskStatus getConsole() {
+		return console;
 	}
 }

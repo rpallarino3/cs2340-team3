@@ -44,8 +44,8 @@ public class RiskStatus {
      */
     public String wrap(String front, String back) {
         StringBuilder sb = new StringBuilder();
-        for(Object str : status) {
-            sb.append(front).append(str.toString()).append(back);
+        for(int i=status.size()-1; i >= 0; i--) {
+            sb.append(front).append(status.get(i).toString()).append(back);
         }
         return sb.toString();
     }

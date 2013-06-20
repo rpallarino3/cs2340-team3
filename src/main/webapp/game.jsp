@@ -403,6 +403,9 @@ A{text-decoration:none; background-color:white;}
 			
 		</div>
 	</div>
+</div>
+<%@ include file="/console.jsp" %>
+
 
 </body>
 </html>

@@ -38,16 +38,22 @@ public class GameServlet extends HttpServlet {
 
 		else if (game.getStage() == Game.PICK) {
 			pickTerritories(request);
-			if (game.getStage() == Game.INITIAL_REINFORCE)
+			if (game.getStage() == Game.PICK) {
 				System.out.println(game.getCurrentPlayer().getName()
 						+ ", please pick a territory!");
+				console.append(game.getCurrentPlayer().getName()
+						+ ", please pick a territory!");
+			}
 		}
 
 		else if (game.getStage() == Game.INITIAL_REINFORCE) {
 			initialReinforce(request);
-			if (game.getStage() == Game.INITIAL_REINFORCE)
+			if (game.getStage() == Game.INITIAL_REINFORCE) {
 				System.out.println(game.getCurrentPlayer().getName()
 						+ ", please reinforce your territories!");
+				console.append(game.getCurrentPlayer().getName()
+						+ ", please reinforce your territories!");
+			}
 		}
 
 		else if (game.getStage() == Game.ATTACK) {

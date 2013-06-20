@@ -7,7 +7,8 @@ public class Territory {
 	private String name;
 	private Player playerOwned;
 	private int numArmies;
-    private ArrayList<Territory> adjacentTerritories;     
+    private ArrayList<Territory> adjacentTerritories;
+    private int marginLeft, marginTop;
 	/**
 	 * Creates a territory
 	 * 
@@ -16,6 +17,17 @@ public class Territory {
 	public Territory(String name) {
 		this.name=name;
         adjacentTerritories = new ArrayList<Territory>();
+	}
+	
+	/**
+	 * Used if placing location of territory in html
+	 * based on absolute margins.
+	 */
+	public Territory(String name, 
+			int marginLeft, int marginTop) {
+		this(name);
+		this.marginLeft=marginLeft;
+		this.marginTop=marginTop;
 	}
 	
 	
@@ -63,6 +75,22 @@ public class Territory {
 	}
 
     /**
+	 * @return the marginLeft
+	 */
+	public int getMarginLeft() {
+		return marginLeft;
+	}
+
+
+	/**
+	 * @return the marginTop
+	 */
+	public int getMarginTop() {
+		return marginTop;
+	}
+
+
+	/**
     * Transfer armies between two adjacent territories
     *
     * @param t the territory to move to

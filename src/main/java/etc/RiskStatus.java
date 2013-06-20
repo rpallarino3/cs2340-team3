@@ -3,13 +3,13 @@ package etc;
 import java.util.ArrayList;
 
 public class RiskStatus {
-    private ArrayList<String> status;
+    private ArrayList<Object> status;
     
     public RiskStatus() {
-        status = new ArrayList<String>();
+        status = new ArrayList<Object>();
     }
 
-    public void append(String str) {
+    public void append(Object str) {
         status.add(str);
     }
     
@@ -44,8 +44,8 @@ public class RiskStatus {
      */
     public String wrap(String front, String back) {
         StringBuilder sb = new StringBuilder();
-        for(String str : status) {
-            sb.append(front).append(str).append(back);
+        for(int i=status.size()-1; i >= 0; i--) {
+            sb.append(front).append(status.get(i).toString()).append(back);
         }
         return sb.toString();
     }

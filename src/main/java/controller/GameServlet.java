@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.*;
+import etc.*;
 
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = { "/game", "/game/*" })
 public class GameServlet extends HttpServlet {
 
 	private Game game;
+    private RiskStatus console;
 	private int territoriesLeft = Game.TERRITORIES;
 	private Hashtable<String, Territory> territories;
 	private int playersReinforcedCompletely = 0;
@@ -66,7 +68,12 @@ public class GameServlet extends HttpServlet {
 	 */
 	private void initialGame(HttpServletRequest request) {
 		game = (Game) request.getSession().getAttribute("game");
+        console = new RiskStatus();
 		territories = game.getTerritories();
+        console.append("Time to pick your territories!");
+        console.append(game.getCurrentPlayer().getName()
+                + ", please pick a territory!");
+
 		System.out.println("Time to pick your territories!");
 		System.out.println(game.getCurrentPlayer().getName()
 				+ ", please pick a territory!");
@@ -92,11 +99,17 @@ public class GameServlet extends HttpServlet {
 			territory.changeNumArmies(1);
 			territory.getPlayerOwned().changeNumArmies(-1);
 			territory.getPlayerOwned().changeNumTerritories(1);
+            
+            console.append(territoryName + " was taken by "
+                    + game.getCurrentPlayer().getName() + "!");
 
 			System.out.println(territoryName + " was taken by "
 					+ game.getCurrentPlayer().getName() + "!");
 			game.nextTurn();
 			territoriesLeft--;
+
+            console.append("There are " + territoriesLeft
+                    + " territories left.");
 			System.out.println("There are " + territoriesLeft
 					+ " territories left.");
 		}
@@ -107,6 +120,9 @@ public class GameServlet extends HttpServlet {
 			game.resetTurn();
 
 			// this is what would be printed to the console once it's created
+            console.append("All territories have been conquered! "
+                    + game.getCurrentPlayer().getName()
+                    + ", please reinforce your armies!");
 			System.out.println("All territories have been conquered! "
 					+ game.getCurrentPlayer().getName()
 					+ ", please reinforce your armies!");
@@ -127,9 +143,13 @@ public class GameServlet extends HttpServlet {
 			if (territory.getPlayerOwned() == game.getCurrentPlayer()) {
 				territory.changeNumArmies(1);
 				territory.getPlayerOwned().changeNumArmies(-1);
+
+                console.append(game.getCurrentPlayer().getName()
+                        + ", has added an army to " + territory.getName());
 				System.out.println(game.getCurrentPlayer().getName()
 						+ ", has added an army to " + territory.getName());
 			} else {
+                console.append("You do not own that territory.");
 				System.out.println("You do not own that territory.");
 				return;
 			}
@@ -137,11 +157,15 @@ public class GameServlet extends HttpServlet {
 					&& game.getCurrentPlayer().getArmiesDistributed() == false) {
 				game.getCurrentPlayer().setArmiesDistributed(true);
 				playersReinforcedCompletely++;
+                console.append(playersReinforcedCompletely);
 				System.out.println(playersReinforcedCompletely);
 			}
 			if (playersReinforcedCompletely == game.getPlayers().size()) {
 				game.setStage(Game.ATTACK);
 				game.resetTurn();
+                console.append("All armies have been distributed. "
+                        + game.getCurrentPlayer().getName()
+                        + ", pick a territory to attack!");
 				System.out.println("All armies have been distributed. "
 						+ game.getCurrentPlayer().getName()
 						+ ", pick a territory to attack!");
@@ -163,6 +187,7 @@ public class GameServlet extends HttpServlet {
 	private void forward(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		request.setAttribute("game", game);
+        request.setAttribute("console", console);
 		RequestDispatcher dispatcher = getServletContext()
 				.getRequestDispatcher("/game.jsp");
 		dispatcher.forward(request, response);

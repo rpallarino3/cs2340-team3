@@ -91,6 +91,7 @@ public class GameServlet extends HttpServlet {
             game.setArmiesAwarded(false);
             console.append("Fortify");
             game.setStage(Game.REINFORCE);
+            game.nextTurn();
         }
 
 		// forward the request

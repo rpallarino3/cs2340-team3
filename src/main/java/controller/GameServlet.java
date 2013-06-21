@@ -66,6 +66,9 @@ public class GameServlet extends HttpServlet {
 			console.append(game.getCurrentPlayer().getName()
 					+ ", choose which territory to attack!");
 		}
+        
+        else if (game.getStage() == Game.FORTIFY) {
+        }
 
 		// forward the request
 		forward(request, response);

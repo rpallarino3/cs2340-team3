@@ -31,3 +31,12 @@
 .map:after {
 	clear:both;
 }
+
+.console {
+	height:200px;
+	width: 850px;
+	float:right;
+	padding:0;
+	border:1px solid #ccc;
+	overflow:auto;
+}

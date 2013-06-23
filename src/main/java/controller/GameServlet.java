@@ -39,9 +39,9 @@ public class GameServlet extends HttpServlet {
 			String territoryName = request.getPathInfo();
 			territoryName = territoryName.substring(1, territoryName.length());
 			Territory territory = territories.get(territoryName);
-			
+
 			game.pickTerritories(territory);
-			
+
 			if (game.getStage() == Game.PICK) {
 				console.append(game.getCurrentPlayer().getName()
 						+ ", please pick a territory!");
@@ -53,21 +53,45 @@ public class GameServlet extends HttpServlet {
 			String territoryName = request.getPathInfo();
 			territoryName = territoryName.substring(1, territoryName.length());
 			Territory territory = territories.get(territoryName);
-			
+
 			game.initialReinforce(territory);
-			
+
 			if (game.getStage() == Game.INITIAL_REINFORCE) {
 				console.append(game.getCurrentPlayer().getName()
 						+ ", please reinforce your territories!");
 			}
 		}
+        
+        else if (game.getStage() == Game.REINFORCE) {
+            if (!game.getArmiesAwarded()) {
+                game.awardArmies(game.getCurrentPlayer());
+                game.setArmiesAwarded(true);
+            }
+            else {
+                String territoryName = request.getPathInfo();
+                territoryName = territoryName.substring(1, territoryName.length());
+                Territory territory = territories.get(territoryName);
+                if (game.getCurrentPlayer().getArmiesAvailable() != 0) {
+                    game.reinforce(game.getCurrentPlayer(), territory);
+                }
+                else {
+                    console.append("Get ready to attack");
+                    game.setStage(Game.ATTACK);
+                }
+            }
+        }
 
 		else if (game.getStage() == Game.ATTACK) {
 			console.append(game.getCurrentPlayer().getName()
 					+ ", choose which territory to attack!");
+            game.setStage(Game.FORTIFY);
 		}
         
         else if (game.getStage() == Game.FORTIFY) {
+            game.setArmiesAwarded(false);
+            console.append("Fortify");
+            game.setStage(Game.REINFORCE);
+            game.nextTurn();
         }
 
 		// forward the request

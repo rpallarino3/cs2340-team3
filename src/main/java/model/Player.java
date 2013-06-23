@@ -76,11 +76,11 @@ public class Player {
 		return numTerritories;
 	}
     
-    public boolean getArmiesDistributed() {
+    public boolean areAllArmiesDistributed() {
         return armiesDistributed;
     }
     
-    public void setArmiesDistributed(boolean b) {
+    public void setAllArmiesDistributed(boolean b) {
         this.armiesDistributed = b;
     }
 

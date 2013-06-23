@@ -251,7 +251,7 @@ public class Game {
 	public void nextTurn() {
 		turn++;
 		if(turn>=players.size())
-			turn=0;
+			turn=0;	
 	}
 	
 	/**
@@ -295,7 +295,7 @@ public class Game {
 					resetTurn();
 
 					// this is what would be printed to the console once it's created
-		            console.append("All territories have been conquered! "
+		            console.append("All territories have been taken! "
 		                    + getCurrentPlayer().getName()
 		                    + ", please reinforce your armies!");
 				}
@@ -309,29 +309,42 @@ public class Game {
 	 * @param territory
 	 */
 	public void initialReinforce(Territory territory) {
-		if (getCurrentPlayer().getArmiesAvailable() != 0) {
-			
-			if (territory.getPlayerOwned() == getCurrentPlayer()) {
+		
+		if (territory.getPlayerOwned() == getCurrentPlayer()) {
+		
+			if (getCurrentPlayer().getArmiesAvailable() != 0) {
 				territory.changeNumArmies(1);
 				territory.getPlayerOwned().changeNumArmies(-1);
-
-                console.append(getCurrentPlayer().getName()
-                        + ", has added an army to " + territory.getName());
+				
+				console.append(getCurrentPlayer().getName()
+						+ ", has added an army to " + territory.getName());
 				System.out.println(getCurrentPlayer().getName()
 						+ ", has added an army to " + territory.getName());
-			} else {
-                console.append("You do not own that territory.");
-				System.out.println("You do not own that territory.");
-				return;
-			}
-			if (getCurrentPlayer().getArmiesAvailable() == 0
-					&& getCurrentPlayer().getArmiesDistributed() == false) {
-				getCurrentPlayer().setArmiesDistributed(true);
-				playersReinforcedCompletely++;
-                console.append(playersReinforcedCompletely);
-				System.out.println(playersReinforcedCompletely);
-			}
-			if (playersReinforcedCompletely == getPlayers().size()) {
+						
+				if (territory.getPlayerOwned().getArmiesAvailable()==0
+					&& territory.getPlayerOwned().areAllArmiesDistributed()==false){
+					
+					territory.getPlayerOwned().setAllArmiesDistributed(true);
+					playersReinforcedCompletely++;
+					console.append(getCurrentPlayer().getName() 
+						+ " has distributed all his armies.");
+					System.out.println(getCurrentPlayer().getName() 
+						+ " has distributed all his armies.");
+
+				}
+				console.append("" + playersReinforcedCompletely);
+				console.append("currnetPlayer " + getCurrentPlayer().getArmiesAvailable());
+				console.append("territoryOwner " + territory.getPlayerOwned().getArmiesAvailable());
+				
+			} 
+			
+		}else {
+			console.append("You do not own that territory.");
+			System.out.println("You do not own that territory.");
+			return;
+		}		
+			
+		if (playersReinforcedCompletely == getPlayers().size()) {
 				setStage(REINFORCE);
 				resetTurn();
                 console.append("All armies have been distributed. "
@@ -340,8 +353,14 @@ public class Game {
 				System.out.println("All armies have been distributed. "
 						+ getCurrentPlayer().getName()
 						+ ", awarding you armies!");
-			}
+		} else {
+			
 			nextTurn();
+			
+			while (getCurrentPlayer().getArmiesAvailable() == 0){
+				nextTurn();
+			}
+			
 		}
 		
 	}

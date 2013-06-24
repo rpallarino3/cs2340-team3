@@ -9,6 +9,7 @@ public class Territory {
 	private int numArmies;
     private ArrayList<Territory> adjacentTerritories;
     private int marginLeft, marginTop;
+
 	/**
 	 * Creates a territory
 	 * 
@@ -16,7 +17,6 @@ public class Territory {
 	 */
 	public Territory(String name) {
 		this.name=name;
-        adjacentTerritories = new ArrayList<Territory>();
 	}
 	
 	/**
@@ -106,4 +106,16 @@ public class Territory {
             // say something about not being able to move to that territory
         }
     }
+	
+	public void setAdjacentTerritories(ArrayList<Territory> neighbors){
+	
+		adjacentTerritories = new ArrayList<Territory>();
+		adjacentTerritories = neighbors;
+		
+	}
+	
+	public ArrayList<Territory> getAdjacentTerritories(){
+		return adjacentTerritories;
+	}
+	
 }

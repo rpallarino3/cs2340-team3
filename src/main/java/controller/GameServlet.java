@@ -33,7 +33,8 @@ public class GameServlet extends HttpServlet {
 			initialGame(request);
 			game.setStage(Game.PICK);
 		}
-
+		
+		//initial picking territory stage
 		else if (game.getStage() == Game.PICK) {
 			// gets the name of the territory, used in the hash map
 			String territoryName = request.getPathInfo();
@@ -47,9 +48,9 @@ public class GameServlet extends HttpServlet {
 						+ ", please pick a territory!");
 			}
 		}
-
+		
+		//intitial territory reinforcing stage
 		else if (game.getStage() == Game.INITIAL_REINFORCE) {
-			// gets the name of the territory, used in the hash map
 			String territoryName = request.getPathInfo();
 			territoryName = territoryName.substring(1, territoryName.length());
 			Territory territory = territories.get(territoryName);
@@ -62,25 +63,17 @@ public class GameServlet extends HttpServlet {
 			}
 		}
         
+		//reinforcing stage
         else if (game.getStage() == Game.REINFORCE) {
-            // if (!game.getArmiesAwarded()) {
-                // game.awardArmies(game.getCurrentPlayer());
-                // game.setArmiesAwarded(true);
-            // }
-            // else {
-            String territoryName = request.getPathInfo();
-            territoryName = territoryName.substring(1, territoryName.length());
-            Territory territory = territories.get(territoryName);
-                // if (game.getCurrentPlayer().getArmiesAvailable() != 0) {
-                    // game.reinforce(game.getCurrentPlayer(), territory);
-                // }
-                // else {
-                    // console.append("Get ready to attack");
-                    // game.setStage(Game.ATTACK);
-                // }
-            // }
-            game.reinforce(territory);
-        }
+           
+                String territoryName = request.getPathInfo();
+                territoryName = territoryName.substring(1, territoryName.length());
+                Territory territory = territories.get(territoryName);
+                game.reinforce(territory);
+
+               
+       }
+
 
 		else if (game.getStage() == Game.ATTACK) {
 			console.append(game.getCurrentPlayer().getName()
@@ -89,6 +82,7 @@ public class GameServlet extends HttpServlet {
 		}
         
         else if (game.getStage() == Game.FORTIFY) {
+
             //game.setArmiesAwarded(false);
             console.append("Fortify");
             game.setStage(Game.REINFORCE);

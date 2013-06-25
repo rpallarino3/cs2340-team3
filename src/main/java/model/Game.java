@@ -31,8 +31,7 @@ public class Game {
   
   private int territoriesLeft=TERRITORIES;
   private int playersReinforcedCompletely = 0;
-  //private boolean armiesAwarded = false;
-
+  
   
   //possible stages of the game
   public static final int PICK=0;
@@ -181,8 +180,7 @@ public class Game {
 
 		            console.append("There are " + territoriesLeft
 		                    + " territories left.");
-					System.out.println("There are " + territoriesLeft
-							+ " territories left.");			
+		
                     nextTurn();
 				}
 
@@ -241,13 +239,7 @@ public class Game {
 		if (playersReinforcedCompletely == getPlayers().size()) {
 				setStage(REINFORCE);
 				resetTurn();
-                // console.append("All armies have been distributed. "
-                        // + getCurrentPlayer().getName()
-                        // + ", pick a territory to attack!");
-				// System.out.println("All armies have been distributed. "
-						// + getCurrentPlayer().getName()
-						// + ", awarding you armies!");
-                console.append("All armies have been diestributed. "
+                console.append("All armies have been distributed."
                         + " Let the game commence! " + getCurrentPlayer().getName() +
                         ", please reinforce your armies!");
                 awardArmies();
@@ -264,17 +256,17 @@ public class Game {
 	}
     
     public void awardArmies() {
-        Player player = getCurrentPlayer();
+    	Player player=getCurrentPlayer();
+    	
         int armiesToAdd;
         armiesToAdd = player.getNumTerritories() / 3;
-        if (armiesToAdd < 3)
-            armiesToAdd = 3;
-        console.append(player.getName() + "has been awarded 3 armies!");
-        player.changeNumArmies(armiesToAdd);
-        // else {
-            // console.append(p.getName() + "has been awarded " + armiesToAdd + " armies!");
-            // p.changeNumArmies(armiesToAdd);
-        // }
+        if(armiesToAdd < 3)
+        	armiesToAdd=3;
+   
+            console.append(player.getName() + " has been awarded " + armiesToAdd + " armies!");
+            player.changeNumArmies(armiesToAdd);
+        
+
         addAustraliaArmies();
         addNorthAmericaArmies();
         addSouthAmericaArmies();
@@ -283,8 +275,10 @@ public class Game {
         addAfricaArmies();
     }
     
-    public void addAustraliaArmies() {
-        Player player = getCurrentPlayer();
+   
+    private void addAustraliaArmies() {
+    	Player player=getCurrentPlayer();
+
         boolean controlled = true;
         for (int i = 0; i < australia.size(); i++) {
             if (australia.get(i).getPlayerOwned() != player) {
@@ -292,13 +286,15 @@ public class Game {
             }
         }
         if (controlled) {
-            console.append(player.getName() + "has been awarded 2 extra armies for controlling Australia!");
+            
+        	console.append(player.getName() + " has been awarded 2 extra armies for controlling Australia!"); 
             player.changeNumArmies(2);
         }
     }
     
-    public void addNorthAmericaArmies() {
-        Player player = getCurrentPlayer();
+    private void addNorthAmericaArmies() {
+    	Player player=getCurrentPlayer();
+
         boolean controlled = true;
         for (int i = 0; i < northAmerica.size(); i++) {
             if (northAmerica.get(i).getPlayerOwned() != player) {
@@ -306,13 +302,14 @@ public class Game {
             }
         }
         if (controlled) {
-            console.append(player.getName() + "has been awarded 5 extra armies for controlling North America!");
+            console.append(player.getName() + " has been awarded 5 extra armies for controlling North America!");
             player.changeNumArmies(5);
         }
     }
     
-    public void addSouthAmericaArmies() {
-        Player player = getCurrentPlayer();
+    private void addSouthAmericaArmies() {
+    	Player player=getCurrentPlayer();
+
         boolean controlled = true;
         for (int i = 0; i < southAmerica.size(); i++) {
             if (southAmerica.get(i).getPlayerOwned() != player) {
@@ -320,13 +317,15 @@ public class Game {
             }
         }
         if (controlled) {
-            console.append(player.getName() + "has been awarded 2 extra armies for controlling South America!");
+            console.append(player.getName() + " has been awarded 2 extra armies for controlling South America!");
+
             player.changeNumArmies(2);
         }
     }
     
-    public void addEuropeArmies() {
-        Player player = getCurrentPlayer();
+    private void addEuropeArmies() {
+    	Player player=getCurrentPlayer();
+
         boolean controlled = true;
         for (int i = 0; i < europe.size(); i++) {
             if (europe.get(i).getPlayerOwned() != player) {
@@ -334,13 +333,13 @@ public class Game {
             }
         }
         if (controlled) {
-            console.append(player.getName() + "has been awarded 5 extra armies for controlling Europe!");
+            console.append(player.getName() + " has been awarded 5 extra armies for controlling Europe!");
             player.changeNumArmies(5);
         }
     }
     
-    public void addAfricaArmies() {
-        Player player = getCurrentPlayer();
+    private void addAfricaArmies() {
+    	Player player=getCurrentPlayer();
         boolean controlled = true;
         for (int i = 0; i < africa.size(); i++) {
             if (africa.get(i).getPlayerOwned() != player) {
@@ -348,13 +347,14 @@ public class Game {
             }
         }
         if (controlled) {
-            console.append(player.getName() + "has been awarded 3 extra armies for controlling Africa!");
+            console.append(player.getName() + " has been awarded 3 extra armies for controlling Africa!");
             player.changeNumArmies(3);
         }
     }
     
-    public void addAsiaArmies() {
-        Player player = getCurrentPlayer();
+    private void addAsiaArmies() {
+    	Player player=getCurrentPlayer();
+
         boolean controlled = true;
         for (int i = 0; i < asia.size(); i++) {
             if (asia.get(i).getPlayerOwned() != player) {
@@ -362,27 +362,30 @@ public class Game {
             }
         }
         if (controlled) {
-            console.append(player.getName() + "has been awarded 7 extra armies for controlling Asia!");
+            console.append(player.getName() + " has been awarded 7 extra armies for controlling Asia!");
             player.changeNumArmies(7);
         }
     }
     
-    public void reinforce(Territory t) {
-        Player player = getCurrentPlayer();
-        if (player.getArmiesAvailable() == 0) {
-            awardArmies();
-        }
-        if (t.getPlayerOwned() == player) {
+    public void reinforce(Territory territory) {
+    	Player player=getCurrentPlayer();
+    	if(player.getArmiesAvailable()==0){
+    		awardArmies();
+    	}
+        if (territory.getPlayerOwned() == player) {
             player.changeNumArmies(-1);
-            t.changeNumArmies(1);
-            console.append(player.getName() + " has added an army to " + t.getName() + "!");
+            territory.changeNumArmies(1);
+            console.append(player.getName() + " has added an army to " + territory.getName() + "!");
+
         }
         else {
             console.append("You do not control that territory.");
         }
-        if (getCurrentPlayer().getArmiesAvailable() == 0) {
-            setStage(ATTACK);
-            console.append(player.getName() + " Attack a territory!");
+   
+        if(getCurrentPlayer().getArmiesAvailable()==0) {
+        	setStage(ATTACK);
+        	console.append(player.getName() + " Attack a territory!");
+
         }
     }
 
@@ -390,11 +393,4 @@ public class Game {
 		return console;
 	}
     
-    // public boolean getArmiesAwarded() {
-        // return armiesAwarded;
-    // }
-    
-    // public void setArmiesAwarded(boolean b) {
-        // this.armiesAwarded = b;
-    // }
 }

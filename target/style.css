@@ -13,7 +13,8 @@
 }
 
 .map {
-	/*color: white;
+/*
+	color: white;
 	background-image:url('game_board.jpg');
 	background-size: 850px 567px;
 	background-repeat: no-repeat;
@@ -23,7 +24,7 @@
 	float: right;
 	padding: 0;
 */
-	}
+}
 
 .map div {
 	position: absolute;

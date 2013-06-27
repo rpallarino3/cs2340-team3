@@ -20,7 +20,7 @@ import model.Player;
 })
 public class PlayerServlet extends HttpServlet {
 
-	ArrayList<Player> players = new ArrayList<>();
+	ArrayList<Player> players = new ArrayList();
 	Game game = null;
 
 	@Override

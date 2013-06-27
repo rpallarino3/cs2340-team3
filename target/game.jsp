@@ -100,7 +100,7 @@ A{text-decoration:none; background-color:white;}
 			  
 			  stage.add(shapesLayer);
 			  stage.add(messageLayer);
-			</script> 
+			</script>
 	
 		</div>
 		

@@ -1,0 +1,43 @@
+.container {
+	width: 1100px;
+	margin: auto;
+	height: 1500px;
+}
+
+.left {
+	float: left;
+	width: 200px;
+	height: 200px;
+	margin: 20px 0;
+	padding: 0;
+}
+
+.map {
+/*	color: white;
+	background-image:url('game_board.jpg');
+	background-size: 850px 567px;
+	background-repeat: no-repeat;
+	margin: 20px 0;
+	height: 570px;
+	width: 850px;
+	float: right;
+	padding: 0;
+*/
+	}
+
+.map div {
+	position: absolute;
+}
+
+.map:after {
+	clear:both;
+}
+
+.console {
+	height:200px;
+	width: 850px;
+	float:right;
+	padding:0;
+	border:1px solid #ccc;
+	overflow:auto;
+}

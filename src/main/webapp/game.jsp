@@ -7,7 +7,7 @@
 <%String color="black"; %>
 <%int armies; %>
 
-<!DOCTYPE HTML>
+//DOCTYPE HTML>
 <html>
   <head>
     <style>
@@ -16,6 +16,8 @@
         padding: 0px;
       }
     </style>
+	<link rel="stylesheet" type="text/css" href="/riskT3/style.css">
+	<title>Divide and Conquer</title>
   </head>
   <body>
     <div id="container"></div>

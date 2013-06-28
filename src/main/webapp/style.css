@@ -18,12 +18,13 @@
 	background-image:url('game_board.jpg');
 	background-size: 850px 567px;
 	background-repeat: no-repeat;
+	*/
 	margin: 20px 0;
-	height: 570px;
-	width: 850px;
+	height: 650px;
+	width: 1000px;
 	float: right;
 	padding: 0;
-*/
+
 }
 
 .map div {

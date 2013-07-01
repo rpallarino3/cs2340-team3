@@ -40,3 +40,17 @@
 	border:1px solid #ccc;
 	overflow:auto;
 }
+
+.console p {
+	margin: 3px;
+}
+
+.console p:nth-child(odd) {
+	/*font-style: italic;*/
+}
+
+.console p:first-child {
+	/*font-style: normal;*/
+	font-weight: bold;
+	color: red;
+}

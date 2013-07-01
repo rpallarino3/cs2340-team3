@@ -38,6 +38,15 @@ public class RiskStatus {
     public String toString(String separator) {
         return wrap("",separator);
     }
+
+    /**
+     * Add more tweakability to printout of status
+     * 
+     * --Greg
+     */
+    public String toString(String separator0, String separator1) {
+        return wrap(separator0,separator1);
+    }
     
     /**
      * Wrap each line with certain String and return all lines

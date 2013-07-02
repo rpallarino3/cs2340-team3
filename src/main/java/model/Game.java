@@ -24,6 +24,7 @@ public class Game {
   private Hashtable<String,Territory> territories;
   private int turn=0;
   private int stage; //please read java doc on setstage()
+  private int attackStage;
   private RiskStatus console;
   
   
@@ -39,6 +40,15 @@ public class Game {
   public static final int REINFORCE=2;
   public static final int ATTACK=3;
   public static final int FORTIFY=4;
+  
+  //possible stages of the attack stage
+  public static final int SELECT_ATTACKING_TERRITORY = 0;
+  public static final int SELECT_DEFENDING_TERRITORY = 1;
+  public static final int ARMIES_TO_ATTACK = 2;
+  public static final int ARMIES_TO_DEFEND = 3;
+  public static final int DIE_ROLL = 4;
+  public static final int FORTIFY_CAPTURED = 5;
+  
   
   
   /**
@@ -139,6 +149,7 @@ public class Game {
 	public void setStage(int stage){
 		this.stage=stage;
 	}
+    
 	
 	/**
 	 * Goes to the next Person's turn.
@@ -386,6 +397,21 @@ public class Game {
         	setStage(ATTACK);
         	console.append(player.getName() + " Attack a territory!");
 
+        }
+    }
+    
+    public void attack() {
+        if (attackStage == SELECT_ATTACKING_TERRITORY) {
+        }
+        else if (attackStage == SELECT_DEFENDING_TERRITORY) {
+        }
+        else if (attackStage == ARMIES_TO_ATTACK) {
+        }
+        else if (attackStage == ARMIES_TO_DEFEND) {
+        }
+        else if (attackStage == DIE_ROLL) {
+        }
+        else {
         }
     }
 

@@ -42,12 +42,13 @@ public class Game {
   public static final int FORTIFY=4;
   
   //possible stages of the attack stage
-  public static final int SELECT_ATTACKING_TERRITORY = 0;
-  public static final int SELECT_DEFENDING_TERRITORY = 1;
-  public static final int ARMIES_TO_ATTACK = 2;
-  public static final int ARMIES_TO_DEFEND = 3;
-  public static final int DIE_ROLL = 4;
-  public static final int FORTIFY_CAPTURED = 5;
+  public static final int CONTINUE_ATTACK = 0;
+  public static final int SELECT_ATTACKING_TERRITORY = 1;
+  public static final int SELECT_DEFENDING_TERRITORY = 2;
+  public static final int ARMIES_TO_ATTACK = 3;
+  public static final int ARMIES_TO_DEFEND = 4;
+  public static final int DIE_ROLL = 5;
+  public static final int FORTIFY_CAPTURED = 6;
   
   
   

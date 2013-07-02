@@ -76,9 +76,12 @@ public class GameServlet extends HttpServlet {
 
 
 		else if (game.getStage() == Game.ATTACK) {
-			console.append(game.getCurrentPlayer().getName()
+			
+            if (game.getAttackStage() == Game.CONTINUE_ATTACK) {
+                console.append(game.getCurrentPlayer().getName()
 					+ ", do you want to attack?");
-            if (game.getAttackStage() == Game.SELECT_ATTACKING_TERRITORY) {
+            }
+            else if (game.getAttackStage() == Game.SELECT_ATTACKING_TERRITORY) {
                 console.append("Select a territory to attack with.");
             
             }

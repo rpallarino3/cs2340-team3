@@ -150,6 +150,14 @@ public class Game {
 		this.stage=stage;
 	}
     
+    public int getAttackStage() {
+        return attackStage;
+    }
+    
+    public void setAttackStage(int attackStage) {
+        this.attackStage=attackStage;
+    }
+    
 	
 	/**
 	 * Goes to the next Person's turn.
@@ -400,20 +408,7 @@ public class Game {
         }
     }
     
-    public void attack() {
-        if (attackStage == SELECT_ATTACKING_TERRITORY) {
-        }
-        else if (attackStage == SELECT_DEFENDING_TERRITORY) {
-        }
-        else if (attackStage == ARMIES_TO_ATTACK) {
-        }
-        else if (attackStage == ARMIES_TO_DEFEND) {
-        }
-        else if (attackStage == DIE_ROLL) {
-        }
-        else {
-        }
-    }
+    
 
 	public RiskStatus getConsole() {
 		return console;

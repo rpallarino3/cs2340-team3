@@ -110,7 +110,21 @@ public class GameServlet extends HttpServlet {
 		forward(request, response);
 
 	}
+	
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
+		
+		System.out.println("In doPost()");
+		
+		String operation = (String) request.getParameter("operation");
+		if(operation.equalsIgnoreCase("fortify")){
+			game.setStage(Game.FORTIFY);
+			console.append(game.getCurrentPlayer().getName() + ", Please fortify a territory if you wish.");
+		}
 
+		forward(request,response);
+	}
 	/**
 	 * This is what should happen when the game is first started i.e. when
 	 * players have been chosen and clicked on "start playing!"

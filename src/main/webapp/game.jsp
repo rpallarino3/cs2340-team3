@@ -70,6 +70,13 @@ A{text-decoration:none; background-color:white;}
 		</div>
 		
 		<div class="console" id="console">
+			<% if (game.getStage()==Game.ATTACK){%>
+					<form action="/riskT3/game/fortify" method="POST">
+						<input type="hidden" name="operation" value="fortify"/>
+						 <input type="submit" value="Move to Fortify Stage"/>
+					</form>
+			<%}%>
+				
 			<%@ include file="/console.jsp" %>
 		</div>
 	</div>

@@ -122,11 +122,7 @@ public class GameServlet extends HttpServlet {
 			game.setStage(Game.FORTIFY);
 			console.append(game.getCurrentPlayer().getName() + ", Please fortify a territory if you wish.");
 		}
-		else if(operation.equalsIgnoreCase("endTurn")){
-			game.nextTurn();
-			game.setStage(Game.REINFORCE);
-		}
-		
+
 		forward(request,response);
 	}
 	/**

@@ -9,6 +9,7 @@ public class Territory {
 	private int numArmies;
     private ArrayList<Territory> adjacentTerritories;
     private int marginLeft, marginTop;
+	private ArrayList polygons;
 
 	/**
 	 * Creates a territory
@@ -24,10 +25,11 @@ public class Territory {
 	 * based on absolute margins.
 	 */
 	public Territory(String name, 
-			int marginLeft, int marginTop) {
+			int marginLeft, int marginTop, ArrayList polygons) {
 		this(name);
 		this.marginLeft=marginLeft;
 		this.marginTop=marginTop;
+		this.polygons=polygons;
 	}
 	
 	

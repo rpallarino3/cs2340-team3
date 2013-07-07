@@ -83,12 +83,12 @@ public class Game {
         //hashtable of possible colors
         Hashtable<Integer,String> colors=
         		new Hashtable<Integer,String>();
-        colors.put(0,"red");
-        colors.put(1,"cyan");
-        colors.put(2, "lime");
-        colors.put(3,"brown");
-        colors.put(4, "gold");
-        colors.put(5, "pink");
+        colors.put(0, "#7D536D"); //452E3C
+        colors.put(1, "#FF3D5A");
+        colors.put(2, "#FFB969");
+        colors.put(3, "#EAF27E");
+        colors.put(4, "#3B8C88");
+        colors.put(5, "#8A2621");
         
         //hashtable of colors already used
         Hashtable<Integer,String> selectedColors=

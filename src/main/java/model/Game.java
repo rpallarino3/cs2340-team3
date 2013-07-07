@@ -95,8 +95,8 @@ public class Game {
         Hashtable<Integer,String> colors=
         		new Hashtable<Integer,String>();
         colors.put(0,"red");
-        colors.put(1,"cyan");
-        colors.put(2, "lime");
+        colors.put(1,"lightskyblue");
+        colors.put(2, "limegreen");
         colors.put(3,"brown");
         colors.put(4, "gold");
         colors.put(5, "pink");

@@ -41,6 +41,7 @@
 			<% } %>
 			</table>
 		</div>
+<<<<<<< HEAD
 		
 		<div>
 			<% Enumeration keys=game.getTerritories().keys(); 
@@ -199,7 +200,6 @@
 			  
 			  shapesLayer.add(territoryPoly);
 			  labelLayer.add(simpleLabel);
-			  
 			  }())
 	}
 	

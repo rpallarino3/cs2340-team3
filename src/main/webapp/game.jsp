@@ -41,7 +41,6 @@
 			<% } %>
 			</table>
 		</div>
-<<<<<<< HEAD
 		
 		<div>
 			<% Enumeration keys=game.getTerritories().keys(); 
@@ -64,7 +63,6 @@
 				<%=territory.getName() %>,<%=player%>,<%=color%>,<%=armies%>,<%=left%>,<%=top%>;
 		<% } %>'>
 		</div>
-	
 
     <div id="map"></div>
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.4.min.js"></script>
@@ -123,7 +121,7 @@
         messageLayer.clear();
         context.font = '18pt Calibri';
         context.fillStyle = '#1F1A1F';
-        context.fillText(message, 10, 25);
+        context.fillText(message, 30, 25);
       }
 	  
 	  var stage = new Kinetic.Stage({
@@ -133,7 +131,7 @@
       });
       var shapesLayer = new Kinetic.Layer();
 	  var labelLayer = new Kinetic.Layer();
-      var messageLayer = new Kinetic.Layer();	
+      var messageLayer = new Kinetic.Layer({offsetX: 10, x: 10});	
 
 	  	console.log(territoryInfo.length);
 		console.log(territoryShapesKeys.length);

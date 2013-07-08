@@ -1,16 +1,48 @@
 package etc;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class RiskStatus {
-    private ArrayList<Object> status;
+    public static int DEF_MAX_SIZE=100;
+    private LinkedList<Object> status;
+    private LinkedList<Long> addTime;
+    private long printTime = 0l;
+    private int size = 0;
+    private int maxSize;
+    private String oldOpenTag = "", oldCloseTag = "";
+    private String newOpenTag = "", newCloseTag = "";
     
     public RiskStatus() {
-        status = new ArrayList<Object>();
+        this(DEF_MAX_SIZE);
     }
 
+    public RiskStatus(int maxSize) {
+        this.maxSize = maxSize;
+        status = new LinkedList<Object>();
+        addTime = new LinkedList<Long>();
+    }
+    
+    public void wrapOld(String openTag, String closeTag) {
+        this.oldOpenTag = openTag;
+        this.oldCloseTag = closeTag;
+    }
+
+    public void wrapNew(String openTag, String closeTag) {
+        this.newOpenTag = openTag;
+        this.newCloseTag = closeTag;
+    }
+    
+    /**
+     * This append method is still iffy because of the possible time errors in the adding of the status, so some real testing may be needed. Because I cannot test for all the time interval.
+     * It will add the status object as well as when it was added.
+     */
     public void append(Object str) {
-        status.add(str);
+        if(size==maxSize){
+            status.removeLast();
+            addTime.removeLast();
+        }
+        status.addFirst(str);
+        addTime.addFirst(System.nanoTime());
     }
     
     public int size() {
@@ -51,11 +83,16 @@ public class RiskStatus {
     /**
      * Wrap each line with certain String and return all lines
      */
-    public String wrap(String front, String back) {
+    private String wrap(String front, String back) {
         StringBuilder sb = new StringBuilder();
-        for(int i=status.size()-1; i >= 0; i--) {
-            sb.append(front).append(status.get(i).toString()).append(back);
+        for(int i=0; i < status.size(); i++) {
+            if(addTime.get(i) > printTime) { //wrap new
+                sb.append(front).append(newOpenTag).append(status.get(i).toString()).append(newCloseTag).append(back);
+            } else {
+                sb.append(front).append(oldOpenTag).append(status.get(i).toString()).append(oldCloseTag).append(back);
+            }
         }
+        printTime=System.nanoTime();
         return sb.toString();
     }
 }

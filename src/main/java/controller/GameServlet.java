@@ -19,6 +19,8 @@ public class GameServlet extends HttpServlet {
 	private Game game;
     private RiskStatus console;
 	private Hashtable<String, Territory> territories;
+	private Territory attackingTerritory;
+	private Territory defendingTerritory;
 
 	/**
 	 * Called when HTTP method is GET (e.g., from an <a href="...">...</a>
@@ -76,26 +78,11 @@ public class GameServlet extends HttpServlet {
 
 
 		else if (game.getStage() == Game.ATTACK) {
-			
-            if (game.getAttackStage() == Game.CONTINUE_ATTACK) {
-                console.append(game.getCurrentPlayer().getName()
-					+ ", do you want to attack?");
-            }
-            else if (game.getAttackStage() == Game.SELECT_ATTACKING_TERRITORY) {
-                console.append("Select a territory to attack with.");
-            
-            }
-            else if (game.getAttackStage() == Game.SELECT_DEFENDING_TERRITORY) {
-            }
-            else if (game.getAttackStage() == Game.ARMIES_TO_ATTACK) {
-            }
-            else if (game.getAttackStage() == Game.ARMIES_TO_DEFEND) {
-            }
-            else if (game.getAttackStage() == Game.DIE_ROLL) {
-            }
-            else {
-            }
-            game.setStage(Game.FORTIFY);
+			String territoryName = request.getPathInfo();
+   			territoryName = territoryName.substring(1, territoryName.length());
+   			Territory territory = territories.get(territoryName);			
+           game.attack(territory);
+
 		}
         
         else if (game.getStage() == Game.FORTIFY) {
@@ -120,6 +107,8 @@ public class GameServlet extends HttpServlet {
 		String operation = (String) request.getParameter("operation");
 		if(operation.equalsIgnoreCase("fortify")){
 			game.setStage(Game.FORTIFY);
+			game.resetAttackingTerritory();
+			game.resetDefendingTerritory();
 			console.append(game.getCurrentPlayer().getName() + ", Please fortify a territory if you wish.");
 		}
 

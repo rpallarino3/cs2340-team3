@@ -9,8 +9,8 @@ public class RiskStatus {
     private long printTime = 0l;
     private int size = 0;
     private int maxSize;
-    private String oldOpenTag = "", oldCloseTag = "";
-    private String newOpenTag = "", newCloseTag = "";
+    private String oldOpenTag = "<p class=\"oldStatus\">", oldCloseTag = "";
+    private String newOpenTag = "<p class=\"newStatus\">", newCloseTag = "";
     
     public RiskStatus() {
         this(DEF_MAX_SIZE);

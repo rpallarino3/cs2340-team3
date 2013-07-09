@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Territory {
 	
@@ -117,5 +118,33 @@ public class Territory {
 	public ArrayList<Territory> getAdjacentTerritories(){
 		return adjacentTerritories;
 	}
-	
+    
+    /**
+     * Method for this territory to throw die for defending.
+     * @return An array of maximum 2 ints that corresponding to die number.
+     */
+    public int[] defendRoll() {
+        if(numArmies==0) return new int[0];
+        Random rand = new Random();
+        if(numArmies==1) {
+            return new int[] { rand.nextInt(6)+1 };
+        } else {
+            return new int[] { rand.nextInt(6)+1 , rand.nextInt(6)+1 };
+        }
+    }
+    
+    /**
+     * Method for this territory to throw die for attacking.
+     * @return An array of maximum 3 ints that corresponding to die number.
+     */
+    public int[] attackRoll() {
+        if(numArmies==0) return new int[0];
+        Random rand = new Random();
+        if(numArmies==1)
+            return new int[] { rand.nextInt(6)+1 };
+        else if(numArmies==2)
+            return new int[] { rand.nextInt(6)+1 , rand.nextInt(6)+1 };
+        else
+            return new int[] { rand.nextInt(6)+1, rand.nextInt(6)+1, rand.nextInt(6)+1 };
+    }
 }

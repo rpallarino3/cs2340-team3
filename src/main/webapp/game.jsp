@@ -171,7 +171,8 @@
 				points: territoryShapes[currentTerritory],
 				fill: territoryFill,
 				stroke: '#1F1A1F',
-				strokeWidth: 1
+				strokeWidth: 1,
+				opacity: 0.5
 			  });
 
 			  territoryPoly.on('mouseover', function() {
@@ -200,9 +201,8 @@
 			  labelLayer.add(simpleLabel);
 			  }())
 	}
-	
-      stage.add(shapesLayer);
 	  stage.add(labelLayer);
+      stage.add(shapesLayer);
       stage.add(messageLayer);
 
     </script>

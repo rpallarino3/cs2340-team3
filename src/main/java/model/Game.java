@@ -27,6 +27,9 @@ public class Game {
   private int attackStage;
   private RiskStatus console;
   
+  private Territory attackingTerritory;
+  private Territory defendingTerritory;
+  
   
   public static final int TERRITORIES=39; //number of territories in the game
   
@@ -405,15 +408,88 @@ public class Game {
    
         if(getCurrentPlayer().getArmiesAvailable()==0) {
         	setStage(ATTACK);
-        	console.append(player.getName() + " Attack a territory!");
+        	setAttackStage(SELECT_ATTACKING_TERRITORY);
+        	console.append(player.getName() + " Select a territory to attack with.");
 
         }
+    }
+    
+    public void attack(Territory territory){
+    	/*if (game.getAttackStage() == Game.CONTINUE_ATTACK) {
+        game.setAttackStage(Game.SELECT_ATTACKING_TERRITORY);
+    }*/
+   
+    	
+  /*else */if (getAttackStage() == SELECT_ATTACKING_TERRITORY) {
+	  			int adjacentTerritoryCount=0;
+	  			for(int i=0;i<territory.getAdjacentTerritories().size();i++){
+	  				ArrayList<Territory>adjacentTerritories=territory.getAdjacentTerritories();
+  		
+	  				if(adjacentTerritories.get(i).getPlayerOwned()==getCurrentPlayer()){
+	  					adjacentTerritoryCount++;
+	  				}
+	  			}
+  	
+	  			
+  	
+	  			
+	  			if(territory.getPlayerOwned()==getCurrentPlayer()){
+	  				
+	  				if(adjacentTerritoryCount==territory.getAdjacentTerritories().size()){
+		  				console.append("You cannot attack with a territory where all adjacent territories are owned by you.");
+		  			}
+	  				else if(territory.getNumArmies()<2){
+		  				console.append("You must have at least 2 armies in a territory to attack with");
+		  			}
+	  				else{
+		  				attackingTerritory=territory;
+		  				setAttackStage(Game.SELECT_DEFENDING_TERRITORY);
+		  				console.append(getCurrentPlayer().getName()+", choose a territory adjacent to " 
+		  						+ attackingTerritory.getName() +" to attack.");
+	  				}
+	  			}
+	  			else{
+	  				console.append("You must attack with a territory that you own.");
+	  			}
+	  			
+    	}
+    
+		else if (getAttackStage() == Game.SELECT_DEFENDING_TERRITORY) {
+			if(territory.getPlayerOwned()==getCurrentPlayer()){
+				console.append("you can't attack your own territory!");
+			}
+			else if(attackingTerritory.getAdjacentTerritories().contains(territory)){
+				defendingTerritory=territory;
+				setAttackStage(Game.ARMIES_TO_ATTACK);
+				console.append(getCurrentPlayer().getName()+", how many armies do you wish to attack with?");
+			}
+			else{
+				console.append("You must attack a territory adjacent to " + attackingTerritory.getName()+"!");
+			}
+		}
+   
+		else if (getAttackStage() == Game.ARMIES_TO_ATTACK) {
+		}
+   
+		else if (getAttackStage() == Game.ARMIES_TO_DEFEND) {
+		}
+   
+		else if (getAttackStage() == Game.DIE_ROLL) {
+		}
     }
     
     
 
 	public RiskStatus getConsole() {
 		return console;
+	}
+
+
+	public void resetAttackingTerritory() {
+		attackingTerritory=null;
+	}
+	public void resetDefendingTerritory() {
+		defendingTerritory=null;
 	}
     
 }

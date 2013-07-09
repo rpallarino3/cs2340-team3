@@ -9,4 +9,9 @@ $(document).ready(function() {
             alert("status: "+status+"\ndata: "+data.data);
         });
     });
+    $('#testchange').click(function() {
+        $.get("./api/decrease", function(data,status) {
+            $('#number').
+        });
+    });
 });

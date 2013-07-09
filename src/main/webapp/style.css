@@ -52,7 +52,7 @@
 	/*font-style: italic;*/
 }
 
-.console p:first-child {
+.console p.newStatus {
 	/*font-style: normal;*/
 	font-weight: bold;
 	color: red;

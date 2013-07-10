@@ -11,38 +11,14 @@
 <!-- <DOCTYPE HTML> -->
 <html>
   <head>
-    <style>
-      body {
-        margin: 0px;
-        padding: 0px;
-      }
-    </style>
 	<link rel="stylesheet" type="text/css" href="/riskT3/style.css">
 	<title>Divide and Conquer</title>
   </head>
-  <body class="main">
-	<div class="container">
-		<div class="left">
-			<table border = "1">
-			<tr>
-				<th> Turn Order </th>
-				<th> Player </th>
-				<th> # of Armies </th>
-				<th> Color </th>
-			</tr>
 
-			<% for (int i=0;i<players.size(); i++) { %>
-			<tr style="color:<%= players.get(i).getColor() %>">
-				<td><% out.println(i+1); %></td>
-				<td> <% out.println(players.get(i).getName()); %></td>
-				<td> <% out.println(players.get(i).getArmiesAvailable()); %> </td>
-				<td> <% out.println(players.get(i).getColor()); %> </td>
-			</tr>
-			<% } %>
-			</table>
-		</div>
+  <body class="main">
+	<div class="container">		
 		
-		<div>
+		<div class="hiddenInputs">
 			<% Enumeration keys=game.getTerritories().keys(); 
 		   String key;
 		   int top,left;%>
@@ -206,17 +182,44 @@
       stage.add(messageLayer);
 
     </script>
-	
-		<div class="console" id="console">
-			<% if (game.getStage()==Game.ATTACK){%>
-					<form action="/riskT3/game/fortify" method="POST">
-						<input type="hidden" name="operation" value="fortify"/>
-						 <input type="submit" value="Move to Fortify Stage"/>
-					</form>
-			<%}%>
-				
-			<%@ include file="/console.jsp" %>
+    	
+    	<?php /****************************** FOOTER (console and table) ******************************/ ?>
+
+		<div class="footer">
+			<div class="console" id="console">
+				<% if (game.getStage()==Game.ATTACK){%>
+						<form action="/riskT3/game/fortify" method="POST">
+							<input type="hidden" name="operation" value="fortify"/>
+							 <input type="submit" value="Move to Fortify Stage"/>
+						</form>
+				<%}%>
+					
+				<%@ include file="/console.jsp" %>
+			</div>
+			<div class="playerTable">
+				<table border="1">
+				<tr>
+					<th> Turn Order </th>
+					<th> Player </th>
+					<th> # of Armies </th>
+					<th> Color </th>
+				</tr>
+
+				<% for (int i=0;i<players.size(); i++) { %>
+				<tr style="color:<%= players.get(i).getColor() %>">
+					<td><% out.println(i+1); %></td>
+					<td> <% out.println(players.get(i).getName()); %></td>
+					<td> <% out.println(players.get(i).getArmiesAvailable()); %> </td>
+					<td> <% out.println(players.get(i).getColor()); %> </td>
+				</tr>
+				<% } %>
+				</table>
+			</div>
 		</div>
+
+		<?php /****************************** /FOOTER (console and table) ******************************/ ?>
+
+
 	</div>
   </body>
 </html>

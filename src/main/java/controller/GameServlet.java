@@ -80,7 +80,13 @@ public class GameServlet extends HttpServlet {
             if (game.getAttackStage() == Game.CONTINUE_ATTACK) {
                 console.append(game.getCurrentPlayer().getName()
 					+ ", do you want to attack?");
-                //need a yes or no option here
+                //need a yes or no option here to go through if statement
+                if (true) {
+                    game.setAttackStage(Game.SELECT_ATTACKING_TERRITORY);
+                }
+                else {
+                    game.setStage(Game.FORTIFY);
+                }
             }
             else if (game.getAttackStage() == Game.SELECT_ATTACKING_TERRITORY) {
                 console.append("Select a territory to attack with.");
@@ -96,7 +102,6 @@ public class GameServlet extends HttpServlet {
             }
             else {
             }
-            game.setStage(Game.FORTIFY);
 		}
         
         else if (game.getStage() == Game.FORTIFY) {

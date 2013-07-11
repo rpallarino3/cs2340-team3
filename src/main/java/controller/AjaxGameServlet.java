@@ -17,10 +17,11 @@ import model.*;
 import etc.*;
 
 @SuppressWarnings("serial")
-@WebServlet(urlPatterns = { "/game", "/game/*" })
+@WebServlet(urlPatterns = { "/agame", "/agame/*" })
 public class AjaxGameServlet extends HttpServlet {
 
 	private Game game;
+    private RiskStatus console;
 	private Hashtable<String, Territory> territories;
 
 	/**
@@ -29,72 +30,10 @@ public class AjaxGameServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
-		System.out.println("In doGet()");
 
-		// if the game hasn't been set yet.
-		if (game == null) {
-			initialGame(request);
-			game.setStage(Game.PICK);
-		}
-		
-		//initial picking territory stage
-		else if (game.getStage() == Game.PICK) {
-			// gets the name of the territory, used in the hash map
-			String territoryName = request.getPathInfo();
-			territoryName = territoryName.substring(1, territoryName.length());
-			Territory territory = territories.get(territoryName);
-
-			game.pickTerritories(territory);
-
-			if (game.getStage() == Game.PICK) {
-				console.append(game.getCurrentPlayer().getName()
-						+ ", please pick a territory!");
-			}
-		}
-		
-		//intitial territory reinforcing stage
-		else if (game.getStage() == Game.INITIAL_REINFORCE) {
-			String territoryName = request.getPathInfo();
-			territoryName = territoryName.substring(1, territoryName.length());
-			Territory territory = territories.get(territoryName);
-
-			game.initialReinforce(territory);
-
-			if (game.getStage() == Game.INITIAL_REINFORCE) {
-				console.append(game.getCurrentPlayer().getName()
-						+ ", please reinforce your territories!");
-			}
-		}
-        
-		//reinforcing stage
-        else if (game.getStage() == Game.REINFORCE) {
-           
-                String territoryName = request.getPathInfo();
-                territoryName = territoryName.substring(1, territoryName.length());
-                Territory territory = territories.get(territoryName);
-                game.reinforce(territory);
-
-               
-       }
-
-
-		else if (game.getStage() == Game.ATTACK) {
-			console.append(game.getCurrentPlayer().getName()
-					+ ", choose which territory to attack!");
-            game.setStage(Game.FORTIFY);
-		}
-        
-        else if (game.getStage() == Game.FORTIFY) {
-
-            //game.setArmiesAwarded(false);
-            console.append("Fortify");
-            game.setStage(Game.REINFORCE);
-            game.nextTurn();
-        }
-
-		// forward the request
-		forward(request, response);
-
+            response.setContentType("application/json");
+            PrintWriter responseWriter = response.getWriter();
+            responseWriter.write( "{\"data\":\"hello\",\"status\":\"success\"}");
 	}
 
 	/**

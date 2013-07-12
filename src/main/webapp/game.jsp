@@ -207,7 +207,18 @@
 
     </script>
 	
+
 		<div class="console" id="console">
+			
+			<% if (game.checkDisplayAddArmiesOption()) { %>
+				<form action="/riskT3/game/addArmies" method="POST">
+				<th><span style="color:red"> Specify the Number of Armies to Add: </span></th>
+				<input type="hidden" name="operation" value="initialReinforce"/>
+				<td><input type="text" name="numArmies"/></td>
+				<td><input type="submit" value="Submit"/></td>
+				</form>	
+			<%}%>
+			
 			<% if (game.getStage()==Game.ATTACK){%>
 					<form action="/riskT3/game/fortify" method="POST">
 						<input type="hidden" name="operation" value="fortify"/>
@@ -216,6 +227,9 @@
 			<%}%>
 				
 			<%@ include file="/console.jsp" %>
+			
+			
+			
 		</div>
 	</div>
   </body>

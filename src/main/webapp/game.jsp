@@ -187,31 +187,45 @@
 
 		<div class="footer">
 			<div class="console" id="console">
-				<% if (game.getStage()==Game.ATTACK){%>
+			<% if (game.getStage()==Game.ATTACK){%>
 						<form action="/riskT3/game/fortify" method="POST">
 							<input type="hidden" name="operation" value="fortify"/>
 							 <input type="submit" value="Move to Fortify Stage"/>
 						</form>
-				<%}if(game.getAttackStage()==Game.ARMIES_TO_ATTACK ||
+					<%if(game.getAttackStage()==Game.ARMIES_TO_ATTACK ||
 								game.getAttackStage()==Game.ARMIES_TO_DEFEND) {%>
 						<form action="/riskT3/game/selectedArmies" method="POST">
 							<select name="numArmies">
 								<option value="1">One</option>
-								<%if( (game.getAttackStage()==Game.ARMIES_TO_ATTACK 
-										&& game.getAttackingTerritory().getNumArmies()>2)
-										|| (game.getAttackStage()==Game.ARMIES_TO_DEFEND && 
-												game.getDefendingTerritory().getNumArmies()>=2) ){ %>
-									<option value="2">Two</option>
+					<%}if( (game.getAttackStage()==Game.ARMIES_TO_ATTACK 
+							&& game.getAttackingTerritory().getNumArmies()>2)
+							|| (game.getAttackStage()==Game.ARMIES_TO_DEFEND && 
+									game.getDefendingTerritory().getNumArmies()>=2) ){ %>
+								<option value="2">Two</option>
 								
-								<%}if(game.getAttackStage()==Game.ARMIES_TO_ATTACK 
+					<%}if(game.getAttackStage()==Game.ARMIES_TO_ATTACK 
 										&& game.getAttackingTerritory().getNumArmies()>3){ %>
 									<option value="3">Three</option>	
-								<% } %>							
+					<% } %>							
 							</select>
 							<input type="hidden" name="operation" value="selectArmies"/>
 							<input type="submit" value="Select"/>
 						</form>
+						
+					<%if(game.getAttackStage()==Game.DIE_ROLL){ %>
+					   		<form action="/riskT3/game/dieRoll" method="POST">
+								<input type="hidden" name="operation" value="keepRolling"/>
+								keep attacking?
+								<input type="submit" value="Yes"/>
+							</form>
+						
+							<form action="/riskT3/game/selectArmies" method="POST">
+								<input type="hidden" name="operation" value="stopRolling"/>
+								<input type="submit" value="No"/>
+							</form>
 					<%} %>
+			<%} %>
+					
 				<%@ include file="/console.jsp" %>
 			</div>
 			<div class="playerTable">

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;  
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Random;
 import etc.RiskStatus;
@@ -415,13 +416,9 @@ public class Game {
         }
     }
     
-    public void attack(Territory territory){
-    	/*if (game.getAttackStage() == Game.CONTINUE_ATTACK) {
-        game.setAttackStage(Game.SELECT_ATTACKING_TERRITORY);
-    }*/
-   
+    public void selectAttackTerritories(Territory territory){
     	
-  /*else */if (getAttackStage() == SELECT_ATTACKING_TERRITORY) {
+    	if (getAttackStage() == SELECT_ATTACKING_TERRITORY) {
 	  			int adjacentTerritoryCount=0;
 	  			for(int i=0;i<territory.getAdjacentTerritories().size();i++){
 	  				ArrayList<Territory>adjacentTerritories=territory.getAdjacentTerritories();
@@ -431,9 +428,7 @@ public class Game {
 	  				}
 	  			}
   	
-	  			
-  	
-	  			
+
 	  			if(territory.getPlayerOwned()==getCurrentPlayer()){
 	  				
 	  				if(adjacentTerritoryCount==territory.getAdjacentTerritories().size()){
@@ -468,12 +463,14 @@ public class Game {
 				console.append("You must attack a territory adjacent to " + attackingTerritory.getName()+"!");
 			}
 		}
-   
-		else if (getAttackStage() == Game.DIE_ROLL) {
-		}
+
     }
     
-    
+    public void dieRoll(){
+    	getAttackingPlayer().roll();
+    	getDefendingPlayer().roll();
+    	executeDieResults();
+    }
 
 	public RiskStatus getConsole() {
 		return console;
@@ -503,64 +500,55 @@ public class Game {
 	}
 
 
-	public void rollDice(int numRolls) {
+	public void firstDieRoll(int numRolls) {
 		Player attackingPlayer=getAttackingPlayer();
 		Player defendingPlayer=getDefendingPlayer();
 
 		if(getAttackStage() == ARMIES_TO_ATTACK){
-			attackingPlayer.roll(numRolls);
+			attackingPlayer.setNumRolls(numRolls);
+			attackingPlayer.roll();
 			setAttackStage(ARMIES_TO_DEFEND);
 			console.append(defendingPlayer.getName()+
 					", how many armies do you wish to defend with?");
 		}
-		else{
-			defendingPlayer.roll(numRolls);
-			setAttackStage(Game.DIE_ROLL);
-			
-			
-			
+		else if(getAttackStage()==ARMIES_TO_DEFEND){
+			defendingPlayer.roll();
+			executeDieResults();
+			setAttackStage(Game.DIE_ROLL);			
 		}
 		
 	}
 	
-	private void executeDiceResults(){
+	private void executeDieResults(){
 		Integer[] defenderDieRolls=getDefendingPlayer().getDieRolls().toArray(new Integer[0]);
-		Arrays.sort(defenderDieRolls);
+		Arrays.sort(defenderDieRolls,Collections.reverseOrder());
 		console.append(getDefendingPlayer().getName()+ " rolled "
 				+Arrays.toString(defenderDieRolls));
 		
 		Integer[] attackerDieRolls=getAttackingPlayer().getDieRolls().toArray(new Integer[0]);
-		Arrays.sort(attackerDieRolls);
+		Arrays.sort(attackerDieRolls,Collections.reverseOrder());
 		console.append(getAttackingPlayer().getName()+ " rolled "
 				+Arrays.toString(attackerDieRolls));
+		
+		int attackingArmiesLost=0;
+		int defendingArmiesLost=0;
+		
 		for(int i=0;i<Math.min(attackerDieRolls.length,
 				defenderDieRolls.length);i++){
 			
-			int attackingArmiesLost=0;
-			int defendingArmiesLost=0;
-			
-			if(i==0){
-				if(attackerDieRolls[i]>defenderDieRolls[i]){
-					defendingTerritory.changeNumArmies(-1);
-					defendingArmiesLost++;
-				}
-				else{
-					attackingTerritory.changeNumArmies(-1);
-					attackingArmiesLost++;
-				}
+			if(attackerDieRolls[i]>defenderDieRolls[i]){
+				defendingTerritory.changeNumArmies(-1);
+				defendingArmiesLost++;
 			}
 			else{
-				if(attackerDieRolls[i]>defenderDieRolls[i] || attackerDieRolls[i]+1>defenderDieRolls[i]){
-					defendingTerritory.changeNumArmies(-1);
-					defendingArmiesLost++;
-				}
-				else{
-					attackingTerritory.changeNumArmies(-1);
-					attackingArmiesLost++;
-				}
+				attackingTerritory.changeNumArmies(-1);
+				defendingArmiesLost++;
 			}
-				
 		}
+		
+		console.append(getDefendingPlayer().getName()+ " lost "+ defendingArmiesLost+ " armies!");
+		console.append(getAttackingPlayer().getName()+" lost "+ attackingArmiesLost+ " armies!");
+
 	}
 	
 	

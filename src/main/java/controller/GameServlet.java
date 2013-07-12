@@ -80,9 +80,12 @@ public class GameServlet extends HttpServlet {
 		else if (game.getStage() == Game.ATTACK) {
 			String territoryName = request.getPathInfo();
    			territoryName = territoryName.substring(1, territoryName.length());
-   			Territory territory = territories.get(territoryName);			
-           game.attack(territory);
-
+   			Territory territory = territories.get(territoryName);	
+   			if(game.getAttackStage()==Game.SELECT_ATTACKING_TERRITORY ||
+   					game.getAttackStage()==Game.SELECT_DEFENDING_TERRITORY){
+   				
+   				game.selectAttackTerritories(territory);
+   			}
 		}
         
         else if (game.getStage() == Game.FORTIFY) {
@@ -114,7 +117,14 @@ public class GameServlet extends HttpServlet {
 		else if(operation.equalsIgnoreCase("selectArmies")){
 			String numRollsString=request.getParameter("numArmies");
 			int numRolls=Integer.parseInt(numRollsString);
-			game.rollDice(numRolls);
+			game.firstDieRoll(numRolls);
+		}
+		else if(operation.equalsIgnoreCase("keepRolling")){
+			game.dieRoll();
+		}
+		else if(operation.equalsIgnoreCase("stopRolling")){
+			game.setAttackStage(Game.SELECT_ATTACKING_TERRITORY);
+        	console.append(game.getCurrentPlayer().getName() + ", please select a territory to attack with.");
 		}
 
 		forward(request,response);

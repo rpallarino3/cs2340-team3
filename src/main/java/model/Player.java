@@ -13,10 +13,11 @@ import java.util.ArrayList;
 public class Player {
 
 	private String name;
-	private int armiesAvailable; // number of armies available to distribute
-	private int numTerritories;  // number of territories owned by the player
-    private boolean armiesDistributed = false; // if all of the armies have been distributed
+	private int armiesAvailable; 
+	private int numTerritories;  
+    private boolean armiesDistributed = false; 
 	private String color="black";
+	private int numRolls;
     private ArrayList<Integer> dieRolls  = new ArrayList<Integer>();
 	
 	/**
@@ -101,7 +102,7 @@ public class Player {
 		this.color = color;
 	}
     
-    public void roll(int numRolls) {
+    public void roll() {
         dieRolls.clear();
         Random rando = new Random();
         for(int i = 0; i < numRolls; i++) {
@@ -112,4 +113,18 @@ public class Player {
     public ArrayList<Integer> getDieRolls() {
         return dieRolls;
     }
+
+	/**
+	 * @return the numRolls
+	 */
+	public int getNumRolls() {
+		return numRolls;
+	}
+
+	/**
+	 * @param numRolls the numRolls to set
+	 */
+	public void setNumRolls(int numRolls) {
+		this.numRolls = numRolls;
+	}
 }

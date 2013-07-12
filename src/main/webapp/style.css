@@ -28,6 +28,10 @@ body {
     overflow:auto;
 }
 
+.yes{
+	float: left;
+}
+
 .playerTable {
     float: right;
     width: 200px;

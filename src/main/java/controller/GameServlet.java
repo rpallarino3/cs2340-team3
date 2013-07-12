@@ -19,8 +19,6 @@ public class GameServlet extends HttpServlet {
 	private Game game;
     private RiskStatus console;
 	private Hashtable<String, Territory> territories;
-	private Territory attackingTerritory;
-	private Territory defendingTerritory;
 
 	/**
 	 * Called when HTTP method is GET (e.g., from an <a href="...">...</a>
@@ -29,7 +27,10 @@ public class GameServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		System.out.println("In doGet()");
-
+		if(game!=null){
+			System.out.println(game.getStage());
+			System.out.println(game.getAttackStage());
+		}
 		// if the game hasn't been set yet.
 		if (game == null) {
 			initialGame(request);
@@ -83,9 +84,12 @@ public class GameServlet extends HttpServlet {
 		else if (game.getStage() == Game.ATTACK) {
 			String territoryName = request.getPathInfo();
    			territoryName = territoryName.substring(1, territoryName.length());
-   			Territory territory = territories.get(territoryName);			
-           game.attack(territory);
-
+   			Territory territory = territories.get(territoryName);	
+   			if(game.getAttackStage()==Game.SELECT_ATTACKING_TERRITORY ||
+   					game.getAttackStage()==Game.SELECT_DEFENDING_TERRITORY){
+   				
+   				game.selectAttackTerritories(territory);
+   			}
 		}
         
         else if (game.getStage() == Game.FORTIFY) {
@@ -106,7 +110,9 @@ public class GameServlet extends HttpServlet {
 			HttpServletResponse response) throws IOException, ServletException {
 		
 		System.out.println("In doPost()");
+		System.out.println(game.getAttackStage());
 		String operation = (String) request.getParameter("operation");	
+		System.out.println(operation);
 		
 		if (operation.equalsIgnoreCase("initialReinforce")){
 			int numArmiesToAdd = game.getNumArmiesToAdd();
@@ -127,21 +133,37 @@ public class GameServlet extends HttpServlet {
 				console.append("Please type in a valid number of armies");
 			}
 			
-		} else if(operation.equalsIgnoreCase("fortify")){
+		} 
+		else if(operation.equalsIgnoreCase("fortify")){
 			game.setStage(Game.FORTIFY);
 			game.resetAttackingTerritory();
 			game.resetDefendingTerritory();
 			console.append(game.getCurrentPlayer().getName() + ", Please fortify a territory if you wish.");
-			
-		} else if(operation.equalsIgnoreCase("selectArmies")){
-			String numRollsString=request.getParameter("numArmies");
-			int numRolls=Integer.parseInt(numRollsString);
-			game.rollDice(numRolls);
 		}
-		else if(operation.equalsIgnoreCase("selectArmies")){
+		else if(operation.equalsIgnoreCase("selectNumArmies")){
 			String numRollsString=request.getParameter("numArmies");
 			int numRolls=Integer.parseInt(numRollsString);
-			game.rollDice(numRolls);
+			game.firstDieRoll(numRolls);
+		}
+		else if(operation.equalsIgnoreCase("keepRolling")){
+			game.dieRoll();
+		}
+		else if(operation.equalsIgnoreCase("stopRolling")){
+			game.setAttackStage(Game.SELECT_ATTACKING_TERRITORY);
+        	console.append(game.getCurrentPlayer().getName() + ", please select a territory to attack with.");
+		}
+		else if(operation.equalsIgnoreCase("fortifyCaptured")){
+			int numArmiesToAdd = game.getNumArmiesToAdd();
+			String userInput = request.getParameter("numArmies");
+			
+			try {
+				numArmiesToAdd = Integer.parseInt(userInput);
+				game.fortifyCaptured(numArmiesToAdd);
+				
+			}
+			catch (NumberFormatException e){
+				console.append("Please type in a valid number of armies");
+			}
 		}
 
 		forward(request,response);

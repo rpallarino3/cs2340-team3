@@ -1,59 +1,57 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
 .container {
-	width: 1300px;
-	margin: auto;
-	height: 1600px;
+    width: 1000px;
+    margin: auto;
 }
 
-.left {
-	float: left;
-	width: 200px;
-	height: 200px;
-	margin: 20px 0;
-	padding: 0;
+
+#map {
+    margin: auto;
 }
 
-.map {
-/*
-	color: white;
-	background-image:url('game_board.jpg');
-	background-size: 850px 567px;
-	background-repeat: no-repeat;
-	*/
-	margin: 20px 0;
-	height: 650px;
-	width: 1000px;
-	float: right;
-	padding: 0;
-
-}
-
-.map div {
-	position: absolute;
-}
-
-.map:after {
-	clear:both;
+/**************** FOOTER ****************/
+.footer {
+    margin-bottom: 50px;
+    padding-bottom: 50px;
 }
 
 .console {
-	height:200px;
-	width: 850px;
-	float:right;
-	padding:0;
-	border:1px solid #ccc;
-	overflow:auto;
+    height:200px;
+    width: 700px;
+    float: left;
+    padding: 0;
+    border:1px solid #ccc;
+    overflow:auto;
+}
+
+.playerTable {
+    float: right;
+    width: 200px;
+    height: 200px;
+    margin-top: 0;
+    margin-right: 20px;
+    padding: 0;
 }
 
 .console p {
-	margin: 3px;
+    margin: 3px;
 }
 
 .console p:nth-child(odd) {
-	/*font-style: italic;*/
+    /*font-style: italic;*/
 }
 
 .console p.newStatus {
-	/*font-style: normal;*/
-	font-weight: bold;
-	color: red;
+    /*font-style: normal;*/
+    font-weight: bold;
+    color: red;
 }
+
+.footer:after {
+    clear:both;
+}
+

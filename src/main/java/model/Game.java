@@ -554,4 +554,6 @@ public class Game {
 		defendingTerritory=null;
 	}
     
+    
+    
 }

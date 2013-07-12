@@ -197,8 +197,14 @@
 						<form action="/riskT3/game/selectedArmies" method="POST">
 							<select name="numArmies">
 								<option value="1">One</option>
-								<option value="2">Two</option>
-								<%if(game.getAttackStage()==Game.ARMIES_TO_ATTACK){ %>
+								<%if( (game.getAttackStage()==Game.ARMIES_TO_ATTACK 
+										&& game.getAttackingTerritory().getNumArmies()>2)
+										|| (game.getAttackStage()==Game.ARMIES_TO_DEFEND && 
+												game.getDefendingTerritory().getNumArmies()>=2) ){ %>
+									<option value="2">Two</option>
+								
+								<%}if(game.getAttackStage()==Game.ARMIES_TO_ATTACK 
+										&& game.getAttackingTerritory().getNumArmies()>3){ %>
 									<option value="3">Three</option>	
 								<% } %>							
 							</select>

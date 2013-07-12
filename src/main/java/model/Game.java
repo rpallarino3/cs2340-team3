@@ -487,6 +487,14 @@ public class Game {
 		defendingTerritory=null;
 	}
 	
+	public Territory getAttackingTerritory() {
+		return attackingTerritory;
+	}
+	
+	public Territory getDefendingTerritory() {
+		return defendingTerritory;
+	}
+	
 	public Player getAttackingPlayer(){
 		return attackingTerritory.getPlayerOwned();
 	}
@@ -509,15 +517,50 @@ public class Game {
 			defendingPlayer.roll(numRolls);
 			setAttackStage(Game.DIE_ROLL);
 			
-			Integer[] defenderDieRolls=defendingPlayer.getDieRolls().toArray(new Integer[0]);
-			console.append(defendingPlayer.getName()+ " rolled "
-					+Arrays.toString(defenderDieRolls));
 			
-			Integer[] attackerDieRolls=attackingPlayer.getDieRolls().toArray(new Integer[0]);
-			console.append(attackingPlayer.getName()+ " rolled "
-					+Arrays.toString(attackerDieRolls));
+			
 		}
 		
+	}
+	
+	private void executeDiceResults(){
+		Integer[] defenderDieRolls=getDefendingPlayer().getDieRolls().toArray(new Integer[0]);
+		Arrays.sort(defenderDieRolls);
+		console.append(getDefendingPlayer().getName()+ " rolled "
+				+Arrays.toString(defenderDieRolls));
+		
+		Integer[] attackerDieRolls=getAttackingPlayer().getDieRolls().toArray(new Integer[0]);
+		Arrays.sort(attackerDieRolls);
+		console.append(getAttackingPlayer().getName()+ " rolled "
+				+Arrays.toString(attackerDieRolls));
+		for(int i=0;i<Math.min(attackerDieRolls.length,
+				defenderDieRolls.length);i++){
+			
+			int attackingArmiesLost=0;
+			int defendingArmiesLost=0;
+			
+			if(i==0){
+				if(attackerDieRolls[i]>defenderDieRolls[i]){
+					defendingTerritory.changeNumArmies(-1);
+					defendingArmiesLost++;
+				}
+				else{
+					attackingTerritory.changeNumArmies(-1);
+					attackingArmiesLost++;
+				}
+			}
+			else{
+				if(attackerDieRolls[i]>defenderDieRolls[i] || attackerDieRolls[i]+1>defenderDieRolls[i]){
+					defendingTerritory.changeNumArmies(-1);
+					defendingArmiesLost++;
+				}
+				else{
+					attackingTerritory.changeNumArmies(-1);
+					attackingArmiesLost++;
+				}
+			}
+				
+		}
 	}
 	
 	

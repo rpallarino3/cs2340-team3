@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;  
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Random;
 import etc.RiskStatus;
@@ -460,7 +461,7 @@ public class Game {
         if(getCurrentPlayer().getArmiesAvailable()==0) {
         	setStage(ATTACK);
         	setAttackStage(SELECT_ATTACKING_TERRITORY);
-        	console.append(player.getName() + " Select a territory to attack with.");
+        	console.append(player.getName() + ", please select a territory to attack with.");
 
         }
     }
@@ -511,18 +512,12 @@ public class Game {
 			}
 			else if(attackingTerritory.getAdjacentTerritories().contains(territory)){
 				defendingTerritory=territory;
-				setAttackStage(Game.ARMIES_TO_ATTACK);
+				setAttackStage(ARMIES_TO_ATTACK);
 				console.append(getCurrentPlayer().getName()+", how many armies do you wish to attack with?");
 			}
 			else{
 				console.append("You must attack a territory adjacent to " + attackingTerritory.getName()+"!");
 			}
-		}
-   
-		else if (getAttackStage() == Game.ARMIES_TO_ATTACK) {
-		}
-   
-		else if (getAttackStage() == Game.ARMIES_TO_DEFEND) {
 		}
    
 		else if (getAttackStage() == Game.DIE_ROLL) {
@@ -542,6 +537,41 @@ public class Game {
 	public void resetDefendingTerritory() {
 		defendingTerritory=null;
 	}
+	
+	public Player getAttackingPlayer(){
+		return attackingTerritory.getPlayerOwned();
+	}
+	public Player getDefendingPlayer(){
+		return defendingTerritory.getPlayerOwned();
+	}
+
+
+	public void rollDice(int numRolls) {
+		Player attackingPlayer=getAttackingPlayer();
+		Player defendingPlayer=getDefendingPlayer();
+
+		if(getAttackStage() == ARMIES_TO_ATTACK){
+			attackingPlayer.roll(numRolls);
+			setAttackStage(ARMIES_TO_DEFEND);
+			console.append(defendingPlayer.getName()+
+					", how many armies do you wish to defend with?");
+		}
+		else{
+			defendingPlayer.roll(numRolls);
+			setAttackStage(Game.DIE_ROLL);
+			
+			Integer[] defenderDieRolls=defendingPlayer.getDieRolls().toArray(new Integer[0]);
+			console.append(defendingPlayer.getName()+ " rolled "
+					+Arrays.toString(defenderDieRolls));
+			
+			Integer[] attackerDieRolls=attackingPlayer.getDieRolls().toArray(new Integer[0]);
+			console.append(attackingPlayer.getName()+ " rolled "
+					+Arrays.toString(attackerDieRolls));
+		}
+		
+	}
+	
+	
     
     
     

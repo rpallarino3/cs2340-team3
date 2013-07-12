@@ -202,8 +202,20 @@
 							<input type="hidden" name="operation" value="fortify"/>
 							 <input type="submit" value="Move to Fortify Stage"/>
 						</form>
-				<%}%>
-					
+				<%}if(game.getAttackStage()==Game.ARMIES_TO_ATTACK ||
+								game.getAttackStage()==Game.ARMIES_TO_DEFEND) {%>
+						<form action="/riskT3/game/selectedArmies" method="POST">
+							<select name="numArmies">
+								<option value="1">One</option>
+								<option value="2">Two</option>
+								<%if(game.getAttackStage()==Game.ARMIES_TO_ATTACK){ %>
+									<option value="3">Three</option>	
+								<% } %>							
+							</select>
+							<input type="hidden" name="operation" value="selectArmies"/>
+							<input type="submit" value="Select"/>
+						</form>
+					<%} %>
 				<%@ include file="/console.jsp" %>
 			</div>
 			<div class="playerTable">

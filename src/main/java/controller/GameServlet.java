@@ -138,6 +138,11 @@ public class GameServlet extends HttpServlet {
 			int numRolls=Integer.parseInt(numRollsString);
 			game.rollDice(numRolls);
 		}
+		else if(operation.equalsIgnoreCase("selectArmies")){
+			String numRollsString=request.getParameter("numArmies");
+			int numRolls=Integer.parseInt(numRollsString);
+			game.rollDice(numRolls);
+		}
 
 		forward(request,response);
 	}

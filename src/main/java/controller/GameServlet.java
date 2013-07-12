@@ -127,14 +127,17 @@ public class GameServlet extends HttpServlet {
 				console.append("Please type in a valid number of armies");
 			}
 			
-
-			
 		} else if(operation.equalsIgnoreCase("fortify")){
 			game.setStage(Game.FORTIFY);
 			game.resetAttackingTerritory();
 			game.resetDefendingTerritory();
 			console.append(game.getCurrentPlayer().getName() + ", Please fortify a territory if you wish.");
-		} 
+			
+		} else if(operation.equalsIgnoreCase("selectArmies")){
+			String numRollsString=request.getParameter("numArmies");
+			int numRolls=Integer.parseInt(numRollsString);
+			game.rollDice(numRolls);
+		}
 
 		forward(request,response);
 	}

@@ -248,16 +248,10 @@ public class Game {
 			if (getCurrentPlayer().getArmiesAvailable() != 0) {
 				
 				if (checkReadyToAddArmies()){
-					//display an text field for entering # of armies to add
-					//user enters the #
-					//takes in that number and update the number of armies on the territory
-						//must check whether it's a valid army number assignment or not
-				
 					
 					territory.changeNumArmies(numArmiesToAdd);
 					territory.getPlayerOwned().changeNumArmies(-numArmiesToAdd);
 
-					
 					console.append(getCurrentPlayer().getName()
 							+ ", has added " + numArmiesToAdd + " armies to " + territory.getName());
 							
@@ -268,8 +262,6 @@ public class Game {
 						playersReinforcedCompletely++;
 						console.append(getCurrentPlayer().getName() 
 							+ " has distributed all his armies.");
-							
-
 					}
 					
 					setReadyToAddArmies(false);
@@ -312,29 +304,26 @@ public class Game {
 	}
 	
 	public boolean checkReadyToAddArmies(){
-		
-		return readyToAddArmiesOption;
-				
+		return readyToAddArmiesOption;	
 	}
+	
 	public boolean checkDisplayAddArmiesOption(){
 		return displayAddArmiesOption;
 	}
+	
 	public void setReadyToAddArmies(boolean trueFalse){
-		
-		readyToAddArmiesOption = trueFalse;
-				
+		readyToAddArmiesOption = trueFalse;	
 	}
+	
 	public void setOptionToAddArmies(boolean trueFalse){
 		displayAddArmiesOption = trueFalse;
 	}
 	
 	public int getNumArmiesToAdd(){
-	
 		return numArmiesToAdd;
 	}
 	
 	public void setNumArmiesToAdd(int numArmiesToAdd){
-	
 		this.numArmiesToAdd = numArmiesToAdd;
 		setOptionToAddArmies(false);
 		setReadyToAddArmies(true);

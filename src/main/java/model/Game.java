@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;  
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Random;
 import etc.RiskStatus;
@@ -225,9 +226,9 @@ public class Game {
 					setStage(INITIAL_REINFORCE);
 					resetTurn();
 
-					// this is what would be printed to the console once it's created
 		            console.append("All territories have been taken!");
-					console.append("" + getCurrentPlayer().getName() + ", please pick any of your territories to reinforce your armies!");
+					console.append("" + getCurrentPlayer().getName() + 
+							", please pick any of your territories to reinforce your armies!");
 				}
 		
 	}
@@ -466,49 +467,41 @@ public class Game {
         }
     }
     
-    public void attack(Territory territory){
-    	/*if (game.getAttackStage() == Game.CONTINUE_ATTACK) {
-        game.setAttackStage(Game.SELECT_ATTACKING_TERRITORY);
-    }*/
-   
-    	
-  /*else */if (getAttackStage() == SELECT_ATTACKING_TERRITORY) {
-	  			int adjacentTerritoryCount=0;
-	  			for(int i=0;i<territory.getAdjacentTerritories().size();i++){
-	  				ArrayList<Territory>adjacentTerritories=territory.getAdjacentTerritories();
-  		
-	  				if(adjacentTerritories.get(i).getPlayerOwned()==getCurrentPlayer()){
-	  					adjacentTerritoryCount++;
-	  				}
-	  			}
-  	
+    public void selectAttackTerritories(Territory territory){
+    	if (getAttackStage() == SELECT_ATTACKING_TERRITORY) {
 	  			
-  	
-	  			
-	  			if(territory.getPlayerOwned()==getCurrentPlayer()){
-	  				
-	  				if(adjacentTerritoryCount==territory.getAdjacentTerritories().size()){
-		  				console.append("You cannot attack with a territory where all adjacent territories are owned by you.");
-		  			}
-	  				else if(territory.getNumArmies()<2){
-		  				console.append("You must have at least 2 armies in a territory to attack with");
-		  			}
-	  				else{
-		  				attackingTerritory=territory;
-		  				setAttackStage(Game.SELECT_DEFENDING_TERRITORY);
-		  				console.append(getCurrentPlayer().getName()+", choose a territory adjacent to " 
-		  						+ attackingTerritory.getName() +" to attack.");
-	  				}
-	  			}
-	  			else{
-	  				console.append("You must attack with a territory that you own.");
-	  			}
-	  			
+		  	if(territory.getPlayerOwned()==getCurrentPlayer()){
+		  				
+		  		if(isAllAdjacentTerritoriesOwned(territory)){
+			  		console.append("You cannot attack with a territory where all adjacent territories are owned by you.");
+			  	}
+		  		else if(territory.getNumArmies()<2){
+			  		console.append("You must have at least 2 armies in a territory to attack with");
+			  	}
+		  		else{
+			  		attackingTerritory=territory;
+			  		setAttackStage(Game.SELECT_DEFENDING_TERRITORY);
+			  		console.append(getCurrentPlayer().getName()+", choose a territory adjacent to " 
+			  				+ attackingTerritory.getName() +" to attack.");
+		  		}
+		  	}
+		  	else{
+		  		console.append("You must attack with a territory that you own.");
+		  	}
+		  			
     	}
     
-		else if (getAttackStage() == Game.SELECT_DEFENDING_TERRITORY) {
+		else if (getAttackStage() == SELECT_DEFENDING_TERRITORY) {
 			if(territory.getPlayerOwned()==getCurrentPlayer()){
-				console.append("you can't attack your own territory!");
+				if(territory==attackingTerritory){
+					setAttackStage(SELECT_ATTACKING_TERRITORY);
+					console.append("You have removed "+territory.getName()+
+							" as your attacking territory, please pick a new attacking territory!");
+				}
+				else{
+					setAttackStage(SELECT_ATTACKING_TERRITORY);
+					selectAttackTerritories(territory);
+				}
 			}
 			else if(attackingTerritory.getAdjacentTerritories().contains(territory)){
 				defendingTerritory=territory;
@@ -519,12 +512,31 @@ public class Game {
 				console.append("You must attack a territory adjacent to " + attackingTerritory.getName()+"!");
 			}
 		}
-   
-		else if (getAttackStage() == Game.DIE_ROLL) {
-		}
+
     }
     
+    private boolean isAllAdjacentTerritoriesOwned(Territory territory) {
+    	int adjacentTerritoryCount=0;
+			for(int i=0;i<territory.getAdjacentTerritories().size();i++){
+				ArrayList<Territory>adjacentTerritories=territory.getAdjacentTerritories();
+	
+				if(adjacentTerritories.get(i).getPlayerOwned()==getCurrentPlayer()){
+					adjacentTerritoryCount++;
+				}
+			}
+			
+		if(adjacentTerritoryCount==territory.getAdjacentTerritories().size()){
+			return true;
+		}
+		
+		return false;
+    }
     
+    public void dieRoll(){
+    	getAttackingPlayer().roll();
+    	getDefendingPlayer().roll();
+    	executeDieResults();
+    }
 
 	public RiskStatus getConsole() {
 		return console;
@@ -538,6 +550,14 @@ public class Game {
 		defendingTerritory=null;
 	}
 	
+	public Territory getAttackingTerritory() {
+		return attackingTerritory;
+	}
+	
+	public Territory getDefendingTerritory() {
+		return defendingTerritory;
+	}
+	
 	public Player getAttackingPlayer(){
 		return attackingTerritory.getPlayerOwned();
 	}
@@ -546,33 +566,129 @@ public class Game {
 	}
 
 
-	public void rollDice(int numRolls) {
+	public void firstDieRoll(int numRolls) {
 		Player attackingPlayer=getAttackingPlayer();
 		Player defendingPlayer=getDefendingPlayer();
 
 		if(getAttackStage() == ARMIES_TO_ATTACK){
-			attackingPlayer.roll(numRolls);
+			attackingPlayer.setNumRolls(numRolls);
+			attackingPlayer.roll();
 			setAttackStage(ARMIES_TO_DEFEND);
 			console.append(defendingPlayer.getName()+
 					", how many armies do you wish to defend with?");
 		}
-		else{
-			defendingPlayer.roll(numRolls);
-			setAttackStage(Game.DIE_ROLL);
-			
-			Integer[] defenderDieRolls=defendingPlayer.getDieRolls().toArray(new Integer[0]);
-			console.append(defendingPlayer.getName()+ " rolled "
-					+Arrays.toString(defenderDieRolls));
-			
-			Integer[] attackerDieRolls=attackingPlayer.getDieRolls().toArray(new Integer[0]);
-			console.append(attackingPlayer.getName()+ " rolled "
-					+Arrays.toString(attackerDieRolls));
+		else if(getAttackStage()==ARMIES_TO_DEFEND){
+			defendingPlayer.setNumRolls(numRolls);
+			defendingPlayer.roll();
+			executeDieResults();
+			if(getAttackStage()==Game.ARMIES_TO_DEFEND)
+				setAttackStage(Game.DIE_ROLL);			
 		}
 		
 	}
 	
-	
-    
-    
-    
+	private void executeDieResults(){
+		
+		if(getDefendingPlayer().getNumRolls()>defendingTerritory.getNumArmies()){
+			getDefendingPlayer().setNumRolls(defendingTerritory.getNumArmies());
+			getDefendingPlayer().roll();
+		}
+		
+		
+		if(getAttackingPlayer().getNumRolls()>attackingTerritory.getNumArmies()){
+			getAttackingPlayer().setNumRolls(attackingTerritory.getNumArmies());
+			getAttackingPlayer().roll();
+		}
+		
+		Integer[] defenderDieRolls=getDefendingPlayer().getDieRolls().toArray(new Integer[0]);
+		Arrays.sort(defenderDieRolls,Collections.reverseOrder());
+		console.append(getDefendingPlayer().getName()+ " rolled "
+				+Arrays.toString(defenderDieRolls));
+		
+		Integer[] attackerDieRolls=getAttackingPlayer().getDieRolls().toArray(new Integer[0]);
+		Arrays.sort(attackerDieRolls,Collections.reverseOrder());
+		console.append(getAttackingPlayer().getName()+ " rolled "
+				+Arrays.toString(attackerDieRolls));
+		
+		int attackingArmiesLost=0;
+		int defendingArmiesLost=0;
+		
+		for(int i=0;i<Math.min(attackerDieRolls.length,
+				defenderDieRolls.length);i++){
+			
+			if(attackerDieRolls[i]>defenderDieRolls[i]){
+				defendingTerritory.changeNumArmies(-1);
+				defendingArmiesLost++;
+			}
+			else{
+				attackingTerritory.changeNumArmies(-1);
+				attackingArmiesLost++;
+			}
+		}
+		
+		console.append(getDefendingPlayer().getName()+ " lost "+ defendingArmiesLost+ " armies!");
+		console.append(getAttackingPlayer().getName()+" lost "+ attackingArmiesLost+ " armies!");
+		
+		if(defendingTerritory.getNumArmies()<=0){
+			defendingTerritory.setPlayerOwned(getAttackingPlayer());
+			setOptionToAddArmies(true);
+			setAttackStage(FORTIFY_CAPTURED);
+			console.append(getAttackingPlayer().getName()+
+					", move some armies into your newly conquered territory!");
+		}
+				
+		else if(attackingTerritory.getNumArmies()<2 ||
+					isAllAdjacentTerritoriesOwned(getAttackingTerritory()) ){
+			
+			setAttackStage(SELECT_ATTACKING_TERRITORY);
+			console.append(getAttackingPlayer().getName()+", choose another territory " +
+					"to attack with, or move to the fortify stage!");
+		}
+	}
+		
+		public boolean canHaveTwoDie() {
+			if( (getAttackStage()==Game.ARMIES_TO_ATTACK 
+				&& getAttackingTerritory().getNumArmies()>2)
+					|| (getAttackStage()==Game.ARMIES_TO_DEFEND 
+						&& getDefendingTerritory().getNumArmies()>=2) ){ 
+				return true;
+			}
+			return false;
+		}
+		
+		public boolean canHaveThreeDie() {
+			if(getAttackStage()==Game.ARMIES_TO_ATTACK 
+					&& getAttackingTerritory().getNumArmies()>3){
+				return true;
+			}
+			return false;
+		}
+		
+		public boolean canKeepRolling() {
+			if(getAttackStage()==Game.DIE_ROLL && 
+					getDefendingTerritory().getPlayerOwned()!=
+					getAttackingTerritory().getPlayerOwned()){
+				return true;
+			}
+			
+			return false;
+		}
+
+
+		public void fortifyCaptured(int numArmiesToAdd) {
+			if (numArmiesToAdd >= getAttackingPlayer().getNumRolls()
+				&& numArmiesToAdd < getAttackingTerritory().getNumArmies() ){
+			
+				getAttackingTerritory().changeNumArmies(-numArmiesToAdd);
+				getDefendingTerritory().changeNumArmies(numArmiesToAdd);
+				setAttackStage(Game.SELECT_ATTACKING_TERRITORY);
+				console.append(getAttackingPlayer().getName()+", choose another territory " +
+						"to attack with, or move to the fortify stage!");			
+			}
+			else {
+				throw new NumberFormatException();
+			}
+		}
+
 }
+	

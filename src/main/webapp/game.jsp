@@ -190,13 +190,24 @@
 			<div class="console" id="console">
 			
 				<% if (game.checkDisplayAddArmiesOption()) { %>
+					<%if(game.getStage()==Game.INITIAL_REINFORCE){%>
 					<form action="/riskT3/game/addArmies" method="POST">
 					<th><span style="color:red"> Specify the Number of Armies to Add: </span></th>
-					<input type="hidden" name="operation" value="initialReinforce"/>
+						<input type="hidden" name="operation" value="initialReinforce"/>
 					<td><input type="text" name="numArmies"/></td>
 					<td><input type="submit" value="Submit"/></td>
 					</form>	
-				<%}%>			
+					<%}else if(game.getAttackStage()==Game.FORTIFY_CAPTURED){ %>
+						<form action="/riskT3/game/addArmies" method="POST">
+						<th><span style="color:red"> Specify the Number of Armies to Add 
+												(<%=game.getAttackingPlayer().getNumRolls()%> - 
+												<%=game.getAttackingTerritory().getNumArmies()-1%>) </span></th>
+							<input type="hidden" name="operation" value="fortifyCaptured"/>
+						<td><input type="text" name="numArmies"/></td>
+						<td><input type="submit" value="Submit"/></td>
+					</form>
+					<%}%>	
+				<%} %>		
 				<% if (game.getStage()==Game.ATTACK){%>
 						<form action="/riskT3/game/fortify" method="POST">
 							<input type="hidden" name="operation" value="fortify"/>
@@ -207,29 +218,28 @@
 						<form action="/riskT3/game/selectedArmies" method="POST">
 							<select name="numArmies">
 								<option value="1">One</option>
-					<%}if( (game.getAttackStage()==Game.ARMIES_TO_ATTACK 
-							&& game.getAttackingTerritory().getNumArmies()>2)
-							|| (game.getAttackStage()==Game.ARMIES_TO_DEFEND && 
-									game.getDefendingTerritory().getNumArmies()>=2) ){ %>
+						
+						<%if(game.canHaveTwoDie()){ %>
 								<option value="2">Two</option>
 								
-					<%}if(game.getAttackStage()==Game.ARMIES_TO_ATTACK 
-										&& game.getAttackingTerritory().getNumArmies()>3){ %>
-									<option value="3">Three</option>	
-					<% } %>							
+						<%}if(game.canHaveThreeDie()){ %>
+								<option value="3">Three</option>	
+						<% } %>								
 							</select>
-							<input type="hidden" name="operation" value="selectArmies"/>
+							
+							<input type="hidden" name="operation" value="selectNumArmies"/>
 							<input type="submit" value="Select"/>
 						</form>
+					<%} %>
 						
-					<%if(game.getAttackStage()==Game.DIE_ROLL){ %>
-					   		<form action="/riskT3/game/dieRoll" method="POST">
+					<%if(game.canKeepRolling()){ %>
+					   		<form class="yes" action="/riskT3/game/dieRoll" method="POST">
 								<input type="hidden" name="operation" value="keepRolling"/>
 								keep attacking?
 								<input type="submit" value="Yes"/>
 							</form>
 						
-							<form action="/riskT3/game/selectArmies" method="POST">
+							<form class="no" action="/riskT3/game/selectArmies" method="POST">
 								<input type="hidden" name="operation" value="stopRolling"/>
 								<input type="submit" value="No"/>
 							</form>

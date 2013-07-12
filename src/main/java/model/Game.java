@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;  
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Random;
 import etc.RiskStatus;
@@ -27,15 +28,18 @@ public class Game {
   private int attackStage;
   private RiskStatus console;
   
+  private Territory currentTerritory;
   private Territory attackingTerritory;
   private Territory defendingTerritory;
-  
   
   public static final int TERRITORIES=39; //number of territories in the game
   
   private int territoriesLeft=TERRITORIES;
   private int playersReinforcedCompletely = 0;
   
+  private boolean displayAddArmiesOption = false;
+  private boolean readyToAddArmiesOption = false;
+  private int numArmiesToAdd = 0;
   
   //possible stages of the game
   public static final int PICK=0;
@@ -133,6 +137,14 @@ public class Game {
 		return players.get(turn);
 	}
 	
+	public Territory getCurrentTerritory(){
+		return currentTerritory;
+	}
+	
+	private void setCurrentTerritory(Territory currentTerritory){
+		this.currentTerritory = currentTerritory;
+	}
+	
 	/**
 	 * @return the stage
 	 */
@@ -214,9 +226,8 @@ public class Game {
 					resetTurn();
 
 					// this is what would be printed to the console once it's created
-		            console.append("All territories have been taken! "
-		                    + getCurrentPlayer().getName()
-		                    + ", please reinforce your armies!");
+		            console.append("All territories have been taken!");
+					console.append("" + getCurrentPlayer().getName() + ", please pick any of your territories to reinforce your armies!");
 				}
 		
 	}
@@ -229,56 +240,97 @@ public class Game {
 	 */
 	public void initialReinforce(Territory territory) {
 		
+
+		
 		if (territory.getPlayerOwned() == getCurrentPlayer()) {
 		
+			setCurrentTerritory(territory);
+			
 			if (getCurrentPlayer().getArmiesAvailable() != 0) {
-				territory.changeNumArmies(1);
-				territory.getPlayerOwned().changeNumArmies(-1);
 				
-				console.append(getCurrentPlayer().getName()
-						+ ", has added an army to " + territory.getName());
-				System.out.println(getCurrentPlayer().getName()
-						+ ", has added an army to " + territory.getName());
-						
-				if (territory.getPlayerOwned().getArmiesAvailable()==0
-					&& territory.getPlayerOwned().areAllArmiesDistributed()==false){
+				if (checkReadyToAddArmies()){
 					
-					territory.getPlayerOwned().setAllArmiesDistributed(true);
-					playersReinforcedCompletely++;
-					console.append(getCurrentPlayer().getName() 
-						+ " has distributed all his armies.");
-					System.out.println(getCurrentPlayer().getName() 
-						+ " has distributed all his armies.");
+					territory.changeNumArmies(numArmiesToAdd);
+					territory.getPlayerOwned().changeNumArmies(-numArmiesToAdd);
 
+					console.append(getCurrentPlayer().getName()
+							+ ", has added " + numArmiesToAdd + " armies to " + territory.getName());
+							
+					if (territory.getPlayerOwned().getArmiesAvailable()==0
+						&& territory.getPlayerOwned().areAllArmiesDistributed()==false){
+						
+						territory.getPlayerOwned().setAllArmiesDistributed(true);
+						playersReinforcedCompletely++;
+						console.append(getCurrentPlayer().getName() 
+							+ " has distributed all his armies.");
+					}
+					
+					setReadyToAddArmies(false);
+					
+				} else {
+				
+					setOptionToAddArmies(true);
+				
 				}
 				
 			} 
 			
 		}else {
 			console.append("You do not own that territory.");
-			System.out.println("You do not own that territory.");
 			return;
 		}		
-			
-		if (playersReinforcedCompletely == getPlayers().size()) {
-				setStage(REINFORCE);
-				resetTurn();
-                console.append("All armies have been distributed."
-                        + " Let the game commence! " + getCurrentPlayer().getName() +
-                        ", please reinforce your armies!");
-                awardArmies();
-		} else {
-			
-			nextTurn();
-			
-			while (getCurrentPlayer().getArmiesAvailable() == 0){
+		
+		if (!checkDisplayAddArmiesOption() && !checkReadyToAddArmies()) {
+			if (playersReinforcedCompletely == getPlayers().size()) {
+					setStage(REINFORCE);
+					resetTurn();
+					console.append("All armies have been distributed."
+							+ " Let the game commence! " + getCurrentPlayer().getName() +
+							", please reinforce your armies!");
+					awardArmies();
+			} else {
+				
 				nextTurn();
+				
+				while (getCurrentPlayer().getArmiesAvailable() == 0){
+					nextTurn();
+				}
+				
+				console.append(getCurrentPlayer().getName()
+							+ ", please pick any of your territories to reinforce your armies!");
+				
 			}
-			
 		}
 		
 	}
-    
+	
+	public boolean checkReadyToAddArmies(){
+		return readyToAddArmiesOption;	
+	}
+	
+	public boolean checkDisplayAddArmiesOption(){
+		return displayAddArmiesOption;
+	}
+	
+	public void setReadyToAddArmies(boolean trueFalse){
+		readyToAddArmiesOption = trueFalse;	
+	}
+	
+	public void setOptionToAddArmies(boolean trueFalse){
+		displayAddArmiesOption = trueFalse;
+	}
+	
+	public int getNumArmiesToAdd(){
+		return numArmiesToAdd;
+	}
+	
+	public void setNumArmiesToAdd(int numArmiesToAdd){
+		this.numArmiesToAdd = numArmiesToAdd;
+		setOptionToAddArmies(false);
+		setReadyToAddArmies(true);
+	}
+
+ 
     public void awardArmies() {
     	Player player=getCurrentPlayer();
     	
@@ -409,7 +461,7 @@ public class Game {
         if(getCurrentPlayer().getArmiesAvailable()==0) {
         	setStage(ATTACK);
         	setAttackStage(SELECT_ATTACKING_TERRITORY);
-        	console.append(player.getName() + " Select a territory to attack with.");
+        	console.append(player.getName() + ", please select a territory to attack with.");
 
         }
     }
@@ -460,18 +512,12 @@ public class Game {
 			}
 			else if(attackingTerritory.getAdjacentTerritories().contains(territory)){
 				defendingTerritory=territory;
-				setAttackStage(Game.ARMIES_TO_ATTACK);
+				setAttackStage(ARMIES_TO_ATTACK);
 				console.append(getCurrentPlayer().getName()+", how many armies do you wish to attack with?");
 			}
 			else{
 				console.append("You must attack a territory adjacent to " + attackingTerritory.getName()+"!");
 			}
-		}
-   
-		else if (getAttackStage() == Game.ARMIES_TO_ATTACK) {
-		}
-   
-		else if (getAttackStage() == Game.ARMIES_TO_DEFEND) {
 		}
    
 		else if (getAttackStage() == Game.DIE_ROLL) {
@@ -491,6 +537,41 @@ public class Game {
 	public void resetDefendingTerritory() {
 		defendingTerritory=null;
 	}
+	
+	public Player getAttackingPlayer(){
+		return attackingTerritory.getPlayerOwned();
+	}
+	public Player getDefendingPlayer(){
+		return defendingTerritory.getPlayerOwned();
+	}
+
+
+	public void rollDice(int numRolls) {
+		Player attackingPlayer=getAttackingPlayer();
+		Player defendingPlayer=getDefendingPlayer();
+
+		if(getAttackStage() == ARMIES_TO_ATTACK){
+			attackingPlayer.roll(numRolls);
+			setAttackStage(ARMIES_TO_DEFEND);
+			console.append(defendingPlayer.getName()+
+					", how many armies do you wish to defend with?");
+		}
+		else{
+			defendingPlayer.roll(numRolls);
+			setAttackStage(Game.DIE_ROLL);
+			
+			Integer[] defenderDieRolls=defendingPlayer.getDieRolls().toArray(new Integer[0]);
+			console.append(defendingPlayer.getName()+ " rolled "
+					+Arrays.toString(defenderDieRolls));
+			
+			Integer[] attackerDieRolls=attackingPlayer.getDieRolls().toArray(new Integer[0]);
+			console.append(attackingPlayer.getName()+ " rolled "
+					+Arrays.toString(attackerDieRolls));
+		}
+		
+	}
+	
+	
     
     
     

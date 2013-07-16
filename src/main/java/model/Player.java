@@ -1,6 +1,8 @@
 package model;
 
 import java.util.LinkedList;
+import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * A player object for the implementation of the game Risk.
@@ -11,10 +13,12 @@ import java.util.LinkedList;
 public class Player {
 
 	private String name;
-	private int armiesAvailable; // number of armies available to distribute
-	private int numTerritories;  // number of territories owned by the player
-    private boolean armiesDistributed = false; // if all of the armies have been distributed
+	private int armiesAvailable; 
+	private int numTerritories;  
+    private boolean armiesDistributed = false; 
 	private String color="black";
+	private int numRolls;
+    private ArrayList<Integer> dieRolls  = new ArrayList<Integer>();
 	
 	/**
 	 * The player starts with a specific amount of armies,
@@ -96,5 +100,31 @@ public class Player {
 	 */
 	public void setColor(String color) {
 		this.color = color;
+	}
+    
+    public void roll() {
+        dieRolls.clear();
+        Random rando = new Random();
+        for(int i = 0; i < numRolls; i++) {
+            dieRolls.add(rando.nextInt(6) + 1);
+        }
+    }
+    
+    public ArrayList<Integer> getDieRolls() {
+        return dieRolls;
+    }
+
+	/**
+	 * @return the numRolls
+	 */
+	public int getNumRolls() {
+		return numRolls;
+	}
+
+	/**
+	 * @param numRolls the numRolls to set
+	 */
+	public void setNumRolls(int numRolls) {
+		this.numRolls = numRolls;
 	}
 }

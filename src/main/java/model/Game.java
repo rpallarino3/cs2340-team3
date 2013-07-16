@@ -103,12 +103,12 @@ public class Game {
         Hashtable<Integer,String> colors=
         		new Hashtable<Integer,String>();
 
-        colors.put(0, "#7D536D"); //452E3C
-        colors.put(1, "#FF3D5A");
-        colors.put(2, "#FFB969");
-        colors.put(3, "#EAF27E");
-        colors.put(4, "#3B8C88");
-        colors.put(5, "#8A2621");
+        colors.put(0, "darkorange"); //452E3C
+        colors.put(1, "slateblue");
+        colors.put(2, "orchid");
+        colors.put(3, "crimson");
+        colors.put(4, "brown");
+        colors.put(5, "olivedrab");
         
         //hashtable of colors already used
         Hashtable<Integer,String> selectedColors=
@@ -503,6 +503,11 @@ public class Game {
 					selectAttackTerritories(territory);
 				}
 			}
+			else if(attackingTerritory.getNumArmies() <= territory.getNumArmies()){
+				setAttackStage(Game.SELECT_DEFENDING_TERRITORY);
+				console.append("The attacking territory must have at least one more army than the defending territory!");
+				console.append("Choose another territory to attack, or select a new territory to attack with!");
+			}			
 			else if(attackingTerritory.getAdjacentTerritories().contains(territory)){
 				defendingTerritory=territory;
 				setAttackStage(ARMIES_TO_ATTACK);
@@ -533,8 +538,17 @@ public class Game {
     }
     
     public void dieRoll(){
-    	getAttackingPlayer().roll();
-    	getDefendingPlayer().roll();
+
+		if(getAttackingPlayer().getNumRolls()>=attackingTerritory.getNumArmies()){
+			getAttackingPlayer().setNumRolls(attackingTerritory.getNumArmies()-1);
+		}
+
+		if(getDefendingPlayer().getNumRolls()>defendingTerritory.getNumArmies()){
+			getDefendingPlayer().setNumRolls(defendingTerritory.getNumArmies());
+		}
+				
+		getAttackingPlayer().roll();
+		getDefendingPlayer().roll();		
     	executeDieResults();
     }
 
@@ -588,17 +602,6 @@ public class Game {
 	}
 	
 	private void executeDieResults(){
-		
-		if(getDefendingPlayer().getNumRolls()>defendingTerritory.getNumArmies()){
-			getDefendingPlayer().setNumRolls(defendingTerritory.getNumArmies());
-			getDefendingPlayer().roll();
-		}
-		
-		
-		if(getAttackingPlayer().getNumRolls()>attackingTerritory.getNumArmies()){
-			getAttackingPlayer().setNumRolls(attackingTerritory.getNumArmies());
-			getAttackingPlayer().roll();
-		}
 		
 		Integer[] defenderDieRolls=getDefendingPlayer().getDieRolls().toArray(new Integer[0]);
 		Arrays.sort(defenderDieRolls,Collections.reverseOrder());
@@ -668,6 +671,14 @@ public class Game {
 			if(getAttackStage()==Game.DIE_ROLL && 
 					getDefendingTerritory().getPlayerOwned()!=
 					getAttackingTerritory().getPlayerOwned()){
+					
+				if (attackingTerritory.getNumArmies() <= defendingTerritory.getNumArmies()){
+					setAttackStage(SELECT_ATTACKING_TERRITORY);
+					console.append("The attacking territory must have at least one more army than the defending territory!");
+					console.append(getAttackingPlayer().getName()+", choose another territory to attack with, or move to the fortify stage!");
+					return false;
+				}
+				
 				return true;
 			}
 			

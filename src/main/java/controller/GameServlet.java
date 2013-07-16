@@ -124,7 +124,6 @@ public class GameServlet extends HttpServlet {
 					&& numArmiesToAdd <= game.getCurrentPlayer().getArmiesAvailable() ){
 				
 					game.setNumArmiesToAdd(numArmiesToAdd);
-					System.out.println("Armies set");
 					doGet(request, response);
 				} else {
 					console.append("Please type in a valid number of armies");

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Territory {
-	
+	public static final String DEF_TERRITORY_COLOR="#97BDB8";
+
 	private String name;
 	private Player playerOwned;
-	private int numArmies;
+	private int numArmies = 0;
     private ArrayList<Territory> adjacentTerritories;
     private int marginLeft, marginTop;
 

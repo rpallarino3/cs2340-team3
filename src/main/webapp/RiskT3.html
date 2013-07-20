@@ -1,17 +1,31 @@
 <html>
     <head>
+        <script src="riskTeritories.js"></script>
+        <script src="riskLogic.js"></script>
         <script src="jquery.js"></script>
+        <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.4.min.js"></script>
         <script src="riskt3.js"></script>
         <link rel="stylesheet" type="text/css" href="riskt3.css">
     </head>
     <body>
-        <form id="createPlayerForm">
-            <input type="text" name="player1" /><br/>
-            <input type="text" name="player2" /><br/>
-            <input type="text" name="player3" /><br/>
-            <a href='#' class="coolbutton" id="addPlayerBttn"> Add </a>
-            <br/>
-            <a href="#" class="acceptbuttons" id="testbutton"> Start Game </a>
-        <form>
+        <div id="createGameDiv">
+            <form id="createPlayerForm">
+                <input type="text" name="player1" /><br/>
+                <input type="text" name="player2" /><br/>
+                <input type="text" name="player3" /><br/>
+                <a href='#' class="coolbutton" id="addPlayerBttn"> Add </a>
+                <br/>
+                <a href="#" class="acceptbuttons" id="startGame"> Start Game </a>
+            </form>
+        </div>
+        <div id="gameplayDiv">
+            <div id="mapDiv">
+            </div>
+            <div id="playersDiv">
+            </div>
+            <div id="consoleDiv">
+            </div>
+            <a href="#" class="mapButton" id="Germany"> Germany  </a>    
+        </div>
     </body>
 </html>

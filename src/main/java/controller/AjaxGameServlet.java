@@ -79,6 +79,7 @@ public class AjaxGameServlet extends HttpServlet {
             }
             game = new Game(players);
             session.setAttribute("game", game);
+            returnRiskUpdates(response, game);
     }
 
     private String readPostRequestDataAsString(HttpServletRequest request) {
@@ -94,6 +95,7 @@ public class AjaxGameServlet extends HttpServlet {
 
     private void returnRiskUpdates(HttpServletResponse response, Game game) {
         JsonObject reply = AjaxSupport.makeReplyJsonPackage(game.getPlayers(), game.getTerritoriesAsArrayList(), game);
+        System.out.println("pre json");
         Gson gson = new Gson();
         PrintWriter writer = null;
         try {

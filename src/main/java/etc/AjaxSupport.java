@@ -40,7 +40,7 @@ public class AjaxSupport {
         JsonObject territoryJson = new JsonObject();
         territoryJson.addProperty("name",territory.getName());
         territoryJson.addProperty("color",(territory.getPlayerOwned()==null ? Territory.DEF_TERRITORY_COLOR : territory.getPlayerOwned().getColor()));
-        territoryJson.addProperty("owner",territory.getPlayerOwned().getName());
+        territoryJson.addProperty("owner",(territory.getPlayerOwned()==null ? "" : territory.getPlayerOwned().getName()));
         territoryJson.addProperty("armies",territory.getNumArmies());
         territoryJson.addProperty("offsetX",territory.getMarginLeft());
         territoryJson.addProperty("offsetY",territory.getMarginTop());

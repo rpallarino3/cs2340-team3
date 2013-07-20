@@ -5,15 +5,27 @@
  */
 var sessionIsNew = false;
 var gameCreated = false;
+var showGame = function() {
+    $("#createGameDiv").hide();
+    $("#gameplayDiv").show();
+    //$.get(".api/game/risk", function(data, status) {
+          //Risk.riskData = data;
+          //Risk.drawTerritories();
+          //Risk.updateRiskState();
+    //}); 
+}
+var hideGame = function() {
+    $("#createGameDiv").show();
+    $("#gameplayDiv").hide();
+}
 $(document).ready(function() {
     $.get("./api/game/status", function(data, status) {
         sessionIsNew = data.isNew;
         gameCreated = data.gameCreated;
-        alert("newSession: " + sessionIsNew +"\ngameCreated: "+ gameCreated);
-        if(sessionIsNew) {
-         //   alert("new data");
+        if(gameCreated) { //game already created, hide the createGameDiv
+            showGame();
         } else {
-          //  alert("old data");
+            hideGame();
         }
     });
     $("#startGame").click(function() {
@@ -23,15 +35,23 @@ $(document).ready(function() {
         });
         alert(JSON.stringify(players));
         $.post("./api/player/makeGame",{"data" : JSON.stringify(players)},function(data, status) {
-
+            $("#createGameDiv").hide();
+            $("#gameplayDiv").show();
+            //Risk.riskData = data;
+            alert(JSON.stringify(data));
+            //Risk.drawTerritories();
+            //Risk.updateRiskState();
         });
         return false;
     });
     
+    //integrate bottom method to kinetic.js and riskLogic.js
     $(".mapButton").click(function() {
         var territoryName = $(this).attr('id');
         $.get("./api/game/"+territoryName, function(data, status) {
-            alert(territoryName);
+            Risk.riskData = data;
+            RIsk.drawTerritories();
+            Risk.updateRiskState();
         });
         alert("mapButton");
         return false;

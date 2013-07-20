@@ -1,9 +1,9 @@
 <html>
     <head>
-        <script src="riskTeritories.js"></script>
-        <script src="riskLogic.js"></script>
         <script src="jquery.js"></script>
         <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.4.min.js"></script>
+        <script src="riskTerritories.js"></script>
+        <script src="riskLogic.js"></script>
         <script src="riskt3.js"></script>
         <link rel="stylesheet" type="text/css" href="riskt3.css">
     </head>
@@ -20,8 +20,17 @@
         </div>
         <div id="gameplayDiv">
             <div id="mapDiv">
+                <a href="#" class="mapButton" id="Germany"> Germany  </a>
             </div>
             <div id="playersDiv">
+                <table id="playerTable" border="1">
+                    <tr>
+                        <th> Turn Order </th>
+                        <th> Player </th>
+                        <th> # of Armies </th>
+                        <th> Color </th>
+                    </tr>
+                </table>
             </div>
             <div id="consoleDiv">
             </div>

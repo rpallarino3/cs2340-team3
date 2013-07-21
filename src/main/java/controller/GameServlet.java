@@ -99,6 +99,11 @@ public class GameServlet extends HttpServlet {
             game.setStage(Game.REINFORCE);
             game.nextTurn();
         }
+        
+        else if (game.getStage() == Game.GAMEOVER) {
+            console.append(game.getPlayers().get(0).getName() + "has won the game!");
+            //add option to restart game here
+        }
 
 		// forward the request
 		forward(request, response);

@@ -38,30 +38,101 @@ public class AjaxGameServlet extends HttpServlet {
             PrintWriter responseWriter = response.getWriter();
             String servletPath = request.getServletPath();
             String apiFunc = request.getPathInfo().replace("/","");
-            Game game = (Game) session.getAttribute("game");
+            game = (Game) session.getAttribute("game");
             if(!servletPath.contains("api/game"))
                 return;
             if(apiFunc.contains("status")) {
                 responseWriter.write("{\"isNew\":"+gson.toJson(session.isNew())+",\"gameCreated\":"+gson.toJson(game!=null)+"}");
                 return;
             }
-            if(game==null)
+            else if(apiFunc.contains("risk")){
+                if(game!=null)
+                    returnRiskUpdates(response, game);
                 return;
-            int currentStage = game.getStage();
-            if(currentStage == Game.PICK) {
-                String territoryName = apiFunc;
-                Territory territory = territories.get(territoryName);
-                game.pickTerritories(territory);
-                returnRiskUpdates(response, game);
             }
+            else {
+                String territoryName = apiFunc;
+                Territory territory = game.getTerritories().get(territoryName);
+                if(game==null) {
+                    try{
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                    }catch(Exception e){}
+                return;
+                }
+                //initial picking territory stage
+                else if(game.getStage() == Game.PICK) {
+                    game.pickTerritories(territory);
+                    if(game.getStage() == Game.PICK) {
+                        game.getConsole().append(game.getCurrentPlayer().getName() + ", please pick a territory!");
+                    }
+                }
+                //initial territory reinforcing stage
+                else if(game.getStage() == Game.INITIAL_REINFORCE) {
+                    System.out.println("i'm in");
+                    if(game.checkReadyToAddArmies()) {
+                        game.initialReinforce(game.getCurrentTerritory());
+                    } else {
+                       game.initialReinforce(territory);
+                    }
+                }
+                //reinforcing stage
+                else if(game.getStage() == Game.REINFORCE) {
+                    game.reinforce(territory);
+                }
+                //attacking stage
+                else if(game.getStage() == Game.ATTACK) {
+                    if(game.getAttackStage()==Game.SELECT_ATTACKING_TERRITORY || game.getAttackStage()==Game.SELECT_DEFENDING_TERRITORY) {
+                        game.selectAttackTerritories(territory);
+                    }
+                }
+                //XXX not done - fortifying stage
+                else if(game.getStage() == Game.FORTIFY) {
+                    
+                }
+            }
+            returnRiskUpdates(response, game);
 	}
 
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws IOException, ServletException {
-            HttpSession session = request.getSession(true);
             String servletPath = request.getServletPath();
-            String apiFunc = request.getPathInfo();
-            //if(apiFunc
+            if(servletPath.contains("api/player"))
+                handlePostPlayers(request, response);
+            else
+                handlePostTerritory(request, response);
+    }
+    
+    private void handlePostTerritory(HttpServletRequest request, HttpServletResponse response) {
+            HttpSession session = request.getSession(true);
+            game = (Game) session.getAttribute("game");
+            System.out.println("in post");
+            if(game==null) return;
+            //initial reinforcement input
+            if(game.getStage()==Game.INITIAL_REINFORCE) {
+                System.out.println("handling Init");
+                int numArmiesToAdd = game.getNumArmiesToAdd();
+                String userInput = request.getParameter("input");
+                System.out.println(userInput);
+                try {
+                    numArmiesToAdd = Integer.parseInt(userInput);
+                    if(userInput!=null && numArmiesToAdd > 0 && numArmiesToAdd <= game.getCurrentPlayer().getArmiesAvailable() ){
+                        game.setNumArmiesToAdd(numArmiesToAdd);
+                        System.out.println("forwarding");
+                        doGet(request, response);
+                    }
+                    else {
+                        System.out.println("error at input");
+                        game.getConsole().append("Please type in a valid number of armies");
+                    }
+                }catch(Exception e) {
+                    System.out.println("error in try");
+                    game.getConsole().append("Please type in a valid number of armies");
+                }
+            }
+    }
+    
+    private void handlePostPlayers(HttpServletRequest request, HttpServletResponse response) {
+            HttpSession session = request.getSession(true);
             String postData = request.getParameter("data");
             JsonParser parser = new JsonParser();
             JsonArray playersJson = parser.parse(postData).getAsJsonArray();
@@ -72,14 +143,21 @@ public class AjaxGameServlet extends HttpServlet {
                     continue;
                 players.add(new Player(name));
             }
-            if(players.size()<3) return;
+            if(players.size()<3) {
+                try{
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                }catch(Exception e) {}
+                return;
+            }
             int armySize = 40 - (players.size() - 2) * 5;
             for(Player player : players) {
                 player.changeNumArmies(armySize);
             }
             game = new Game(players);
+            game.getConsole().append(game.getCurrentPlayer().getName() + ", please pick a territory!");
+            session.setMaxInactiveInterval(-1);//session time-out never
             session.setAttribute("game", game);
-            returnRiskUpdates(response, game);
+            returnRiskUpdates(response, game); 
     }
 
     private String readPostRequestDataAsString(HttpServletRequest request) {
@@ -95,31 +173,15 @@ public class AjaxGameServlet extends HttpServlet {
 
     private void returnRiskUpdates(HttpServletResponse response, Game game) {
         JsonObject reply = AjaxSupport.makeReplyJsonPackage(game.getPlayers(), game.getTerritoriesAsArrayList(), game);
-        System.out.println("pre json");
         Gson gson = new Gson();
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
         } catch(Exception e) {
             System.out.println("error getting response writer!");
+            return;
         }
-        if(writer==null) return;
         response.setContentType("application/json");
         writer.write(gson.toJson(reply));
     }
-
-	/**
-	 * This is what should happen when the game is first started i.e. when
-	 * players have been chosen and clicked on "start playing!"
-	 * 
-	 * @param request
-	 */
-	private void initialGame(HttpServletRequest request) {
-		game = (Game) request.getSession().getAttribute("game");
-		console=game.getConsole();
-		territories = game.getTerritories();
-        console.append("Time to pick your territories!");
-        console.append(game.getCurrentPlayer().getName()
-                + ", please pick a territory!");
-	}
 }

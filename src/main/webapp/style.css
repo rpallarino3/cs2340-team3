@@ -3,11 +3,29 @@ body {
     padding: 0px;
 }
 
+
+/**************** playerPage ****************/
+
+.startContainer {
+    padding-top: 30px;
+    width: 300px;
+    margin: auto;
+}
+
+.startContainer form {
+    margin-bottom: 0;
+}
+
+.startContainer th {
+    text-align: left;
+}
+
+/**************** /playerPage ****************/
+
 .container {
     width: 1000px;
     margin: auto;
 }
-
 
 #map {
     margin: auto;

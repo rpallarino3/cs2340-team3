@@ -184,7 +184,7 @@ public class GameServlet extends HttpServlet {
             int numArmiesToAdd = game.getNumArmiesToAdd();
             try {
                 numArmiesToAdd = Integer.parseInt(userInput);
-                if (numArmiesToAdd < game.getFortifyingTerritory().getNumArmies()) {
+                if (numArmiesToAdd < game.getFortifyingTerritory().getNumArmies() && numArmiesToAdd > 0) {
                     game.getTerritoryToFortify().changeNumArmies(numArmiesToAdd);
                     game.getFortifyingTerritory().changeNumArmies(-numArmiesToAdd);
                     game.nextTurn();

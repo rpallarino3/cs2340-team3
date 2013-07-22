@@ -182,10 +182,6 @@ public class Game {
 	 * Goes to the next Person's turn.
 	 */
 	public void nextTurn() {
-        console.append("Next turn");
-        //if (stage != PICK && stage != INITIAL_REINFORCE) {
-          //  stage = REINFORCE;
-        //}
 		turn++;
 		if(turn>=players.size())
 			turn=0;	

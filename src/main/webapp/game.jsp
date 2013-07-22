@@ -129,7 +129,8 @@
 					id: currentTerritory + 'Label',
 					x: left,
 					y: top,
-					opacity: 0.75
+					opacity: 0.75,
+					scale: 0.8
 				  });
 				  /*
 				  simpleLabel.add(new Kinetic.Tag({
@@ -149,7 +150,7 @@
 				fill: territoryFill,
 				stroke: '#1F1A1F',
 				strokeWidth: 1,
-				opacity: 0.5
+				opacity: 0.5,
 			  });
 
 			  territoryPoly.on('mouseover', function() {
@@ -157,20 +158,17 @@
 				territoryPoly.setFill('#C6F7F1');
 				territoryPoly.draw();
 				stage.draw();
-				writeMessage(messageLayer, ('Mouseover ' + currentTerritory));
+				writeMessage(messageLayer, (currentTerritory));
 			  });
 			  territoryPoly.on('mouseout', function() {
 		//		territoryPoly.setScale(1);
 				territoryPoly.setFill(territoryFill);
 				territoryPoly.draw();
 				stage.draw();
-				writeMessage(messageLayer, ('Mouseout ' + currentTerritory));
 			  });
 			  territoryPoly.on('mousedown', function() {
-				writeMessage(messageLayer, ('Mousedown '+ currentTerritory));
 			  });
 			  territoryPoly.on('mouseup', function() {
-				writeMessage(messageLayer, ('Mouseup '+ currentTerritory));
 				document.location.href = ('/riskT3/game/' + currentTerritory.replace(' ',''));
 			  });
 

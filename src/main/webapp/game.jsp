@@ -246,6 +246,20 @@
 							</form>
 					<%} %>
 			<%} %>
+            <% if (game.getStage()==Game.FORTIFY) { %>
+                    <form action="/riskT3/game/newTurn" method="POST">
+                        <input type="hidden" name="operation" value="skipFort"/>
+                        <input type="submit" value="Skip Fortify"/>
+                    </form>
+                    <% if (game.getFortifyTerritoriesSelected() == true) { %>
+                        <form action="/riskT3/game/moveArmies" method="POST">
+                        <th><span style="color:red"> Specify the Number of Armies to Move: </span></th>
+                        <input type="hidden" name="operation" value="fortifyingArmies"/>
+                        <td><input type="text" name="numArmies"/></td>
+                        <td><input type="submit" value="Submit"/></td>
+                        </form>
+                    <% } %>
+            <% } %>
             <% if (game.getStage()==Game.GAMEOVER) { %>
                     <form action="/riskT3" method="POST">
                         <input type="hidden" name="operation" value=""/>

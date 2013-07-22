@@ -182,6 +182,10 @@ public class Game {
 	 * Goes to the next Person's turn.
 	 */
 	public void nextTurn() {
+        console.append("Next turn");
+        //if (stage != PICK && stage != INITIAL_REINFORCE) {
+          //  stage = REINFORCE;
+        //}
 		turn++;
 		if(turn>=players.size())
 			turn=0;	
@@ -217,7 +221,7 @@ public class Game {
 					territoriesLeft--;
 
 		            console.append("There are " + territoriesLeft
-		                    + " territories left.");
+		                    + " territorie(s) left.");
 		
                     nextTurn();
 				}
@@ -714,6 +718,59 @@ public class Game {
 			}
 		}
     
+    private Territory territoryToFortify;
+    private Territory fortifyingTerritory;
+    private boolean fortifyTerritoriesSelected;
     
+    public void fortify(Territory territory) {
+        if (territoryToFortify == null) {
+            territoryToFortify = territory;
+            if (territoryToFortify.getPlayerOwned() != getCurrentPlayer()) {
+                console.append("You do not own that territory, pick again.");
+                territoryToFortify = null;
+            }
+            else {
+                console.append("Select a territory to move armies from.");
+            }
+        }
+        else if (fortifyingTerritory == null) {
+            fortifyingTerritory = territory;
+            if (fortifyingTerritory.getPlayerOwned() != getCurrentPlayer()) {
+                console.append("You do not own that territory, start over. Pick a territory to fortify.");
+                resetFortify();
+            }
+            else if (!territoryToFortify.getAdjacentTerritories().contains(fortifyingTerritory)) {
+                console.append("That territory is not next to the territory you want to fortify. Start over.");
+                resetFortify();
+            }
+            else if (fortifyingTerritory.getNumArmies() <= 1) {
+                console.append("Not enough armies to fortify. Start over.");
+                resetFortify();
+            }
+            else {
+                fortifyTerritoriesSelected = true;
+                console.append("Select a number of armies to move.");
+            }
+        }
+        else {
+        }
+    }
+    
+    public Territory getTerritoryToFortify() {
+        return territoryToFortify;
+    }
+    
+    public Territory getFortifyingTerritory() {
+        return fortifyingTerritory;
+    }
+    
+    public boolean getFortifyTerritoriesSelected() {
+        return fortifyTerritoriesSelected;
+    }
+    public void resetFortify() {
+        territoryToFortify = null;
+        fortifyingTerritory = null;
+        fortifyTerritoriesSelected = false;
+    }
 }
 	

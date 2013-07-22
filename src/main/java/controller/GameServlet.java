@@ -93,12 +93,14 @@ public class GameServlet extends HttpServlet {
 		}
         
         else if (game.getStage() == Game.FORTIFY) {
-
+            String territoryName = request.getPathInfo();
+            territoryName = territoryName.substring(1, territoryName.length());
+            Territory territory = territories.get(territoryName);
             //game.setArmiesAwarded(false);
             console.append("Fortify");
-            //game.fortify();
-            game.setStage(Game.REINFORCE);
-            game.nextTurn();
+            game.fortify(territory);
+            //game.setStage(Game.REINFORCE);
+            //game.nextTurn();
         }
         
         else if (game.getStage() == Game.GAMEOVER) {
@@ -140,6 +142,7 @@ public class GameServlet extends HttpServlet {
 		} 
 		else if(operation.equalsIgnoreCase("fortify")){
 			game.setStage(Game.FORTIFY);
+            game.resetFortify();
 			game.resetAttackingTerritory();
 			game.resetDefendingTerritory();
 			console.append(game.getCurrentPlayer().getName() + ", Please fortify a territory if you wish.");
@@ -169,6 +172,32 @@ public class GameServlet extends HttpServlet {
 				console.append("Please type in a valid number of armies");
 			}
 		}
+        else if(operation.equalsIgnoreCase("skipFort")){
+            game.nextTurn();
+            game.setStage(Game.REINFORCE);
+            console.append("Next player, click on a territory to begin.");
+        }
+        else if(operation.equalsIgnoreCase("fortifyingArmies")) {
+            String userInput = request.getParameter("numArmies");
+            int numArmiesToAdd = game.getNumArmiesToAdd();
+            try {
+                numArmiesToAdd = Integer.parseInt(userInput);
+                if (numArmiesToAdd < game.getFortifyingTerritory().getNumArmies()) {
+                    game.getTerritoryToFortify().changeNumArmies(numArmiesToAdd);
+                    game.getFortifyingTerritory().changeNumArmies(-numArmiesToAdd);
+                    game.nextTurn();
+                    game.setStage(Game.REINFORCE);
+                    console.append("Armies have been moved. Next player, click on a territory to begin.");
+                }
+                else {
+                    console.append("Entered number is too large, try again.");
+                }
+            }
+            catch (NumberFormatException e) {
+                console.append("please type in a valid number of armies");
+            }
+            
+        }
 
 		forward(request,response);
 	}

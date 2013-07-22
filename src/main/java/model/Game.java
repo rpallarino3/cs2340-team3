@@ -49,6 +49,7 @@ public class Game {
   public static final int REINFORCE=2;
   public static final int ATTACK=3;
   public static final int FORTIFY=4;
+  public static final int GAMEOVER=5;
   
   //possible stages of the attack stage
   public static final int CONTINUE_ATTACK = 0;
@@ -525,7 +526,7 @@ public class Game {
 					selectAttackTerritories(territory);
 				}
 			}
-			else if(attackingTerritory.getNumArmies() <= territory.getNumArmies()){
+			else if(attackingTerritory.getNumArmies() <= territory.getNumArmies()){ //need to fix this
 				setAttackStage(Game.SELECT_DEFENDING_TERRITORY);
 				console.append("The attacking territory must have at least one more army than the defending territory!");
 				console.append("Choose another territory to attack, or select a new territory to attack with!");
@@ -655,7 +656,19 @@ public class Game {
 		console.append(getAttackingPlayer().getName()+" lost "+ attackingArmiesLost+ " armies!");
 		
 		if(defendingTerritory.getNumArmies()<=0){
+            defendingTerritory.getPlayerOwned().changeNumTerritories(-1);
+            if (defendingTerritory.getPlayerOwned().getNumTerritories() == 0) {
+                console.append(defendingTerritory.getPlayerOwned().getName() + " has been eliminated!");
+                players.remove(defendingTerritory.getPlayerOwned());
+                if (turn != 0) {
+                    turn--;
+                }
+                if (players.size() == 1) {
+                    setStage(GAMEOVER);
+                }
+            }
 			defendingTerritory.setPlayerOwned(getAttackingPlayer());
+            getAttackingPlayer().changeNumTerritories(1);
 			setOptionToAddArmies(true);
 			setAttackStage(FORTIFY_CAPTURED);
 			console.append(getAttackingPlayer().getName()+
@@ -722,6 +735,7 @@ public class Game {
 				throw new NumberFormatException();
 			}
 		}
-
+    
+    
 }
 	

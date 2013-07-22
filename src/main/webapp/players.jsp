@@ -6,7 +6,7 @@
 
 <html>
 <head>
-<title>Game of Risk</title>
+<title>Divide and Conquer</title>
 <link rel="stylesheet" type="text/css" href="/riskT3/style.css">
 </head>
 <body>

@@ -207,7 +207,7 @@
 					</form>
 					<%}%>	
 				<%} %>		
-				<% if (game.getStage()==Game.ATTACK){%>
+				<% if (game.getStage()==Game.ATTACK && game.getAttackStage()!=Game.FORTIFY_CAPTURED){%>
 						<form action="/riskT3/game/fortify" method="POST">
 							<input type="hidden" name="operation" value="fortify"/>
 							 <input type="submit" value="Move to Fortify Stage"/>

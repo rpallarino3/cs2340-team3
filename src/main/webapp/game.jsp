@@ -246,6 +246,12 @@
 							</form>
 					<%} %>
 			<%} %>
+            <% if (game.getStage()==Game.GAMEOVER) { %>
+                    <form action="/riskT3" method="POST">
+                        <input type="hidden" name="operation" value=""/>
+                        <input type="submit" value="Start a new Game?"/>
+                    </form>
+            <% } %>
 					
 				<%@ include file="/console.jsp" %>
 			</div>

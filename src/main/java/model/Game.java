@@ -638,6 +638,9 @@ public class Game {
             if (defendingTerritory.getPlayerOwned().getNumTerritories() == 0) {
                 console.append(defendingTerritory.getPlayerOwned().getName() + " has been eliminated!");
                 players.remove(defendingTerritory.getPlayerOwned());
+                if (turn != 0) {
+                    turn--;
+                }
                 if (players.size() == 1) {
                     setStage(GAMEOVER);
                 }
@@ -710,6 +713,7 @@ public class Game {
 				throw new NumberFormatException();
 			}
 		}
-
+    
+    
 }
 	

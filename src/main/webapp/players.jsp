@@ -6,10 +6,13 @@
 
 <html>
 <head>
-<title>Game of Risk</title>
+<title>Divide and Conquer</title>
+<link rel="stylesheet" type="text/css" href="/riskT3/style.css">
 </head>
 <body>
-<h1>Select Players (3-6)</h1>
+<div class="startContainer">
+
+<h2>Select Players (3-6)</h2>
 
 <table>
 <tr>
@@ -24,7 +27,7 @@
   <td><input type="text" name="name" value="<%= player.getName() %>"/></td>
   <td><input type="submit" value="Update"/></td>
 </form>
-<td valign="bottom">
+<td>
   <form action="/riskT3/delete/<%= id %>" method="POST">
   <!-- hidden operation element to simulate HTTP DELETE method in server -->
     <input type="hidden" name="operation" value="DELETE"/>
@@ -51,6 +54,8 @@
  	<input type="submit" value="Start Playing!"/>
 </form>
 <% } %>
+
+</div>
 
 </body>
 </html>

@@ -199,7 +199,7 @@
 					<%}else if(game.getAttackStage()==Game.FORTIFY_CAPTURED){ %>
 						<form action="/riskT3/game/addArmies" method="POST">
 						<th><span style="color:red"> Specify the Number of Armies to Add 
-												(<%=Math.min(game.getAttackingPlayer().getNumRolls(), game.getAttackingTerritory().getNumArmies())%> to 
+												(<%=game.getAttackingPlayer().getNumRolls()%> to 
 												<%=game.getAttackingTerritory().getNumArmies()-1%>) </span></th>
 							<input type="hidden" name="operation" value="fortifyCaptured"/>
 						<td><input type="text" name="numArmies"/></td>

@@ -730,7 +730,7 @@ public class Game {
                 territoryToFortify = null;
             }
             else {
-                console.append("Select a territory to move armies from.");
+                console.append("Select a territory adjacent to " + territoryToFortify.getName() + " to move armies from.");
             }
         }
         else if (fortifyingTerritory == null) {

@@ -97,7 +97,7 @@ public class GameServlet extends HttpServlet {
             territoryName = territoryName.substring(1, territoryName.length());
             Territory territory = territories.get(territoryName);
             //game.setArmiesAwarded(false);
-            console.append("Fortify");
+           // console.append("Fortify");
             game.fortify(territory);
             //game.setStage(Game.REINFORCE);
             //game.nextTurn();
@@ -145,7 +145,8 @@ public class GameServlet extends HttpServlet {
             game.resetFortify();
 			game.resetAttackingTerritory();
 			game.resetDefendingTerritory();
-			console.append(game.getCurrentPlayer().getName() + ", Please fortify a territory if you wish.");
+			console.append(game.getCurrentPlayer().getName() + ", " +
+					"Please select a territory to fortify, or skip the fortify stage.");
 		}
 		else if(operation.equalsIgnoreCase("selectNumArmies")){
 			String numRollsString=request.getParameter("numArmies");
@@ -175,7 +176,8 @@ public class GameServlet extends HttpServlet {
         else if(operation.equalsIgnoreCase("skipFort")){
             game.nextTurn();
             game.setStage(Game.REINFORCE);
-            console.append("Next player, click on a territory to begin.");
+            game.awardArmies();
+            console.append(game.getCurrentPlayer().getName() + ", reinforce your territories!");
         }
         else if(operation.equalsIgnoreCase("fortifyingArmies")) {
             String userInput = request.getParameter("numArmies");
@@ -187,7 +189,8 @@ public class GameServlet extends HttpServlet {
                     game.getFortifyingTerritory().changeNumArmies(-numArmiesToAdd);
                     game.nextTurn();
                     game.setStage(Game.REINFORCE);
-                    console.append("Armies have been moved. Next player, click on a territory to begin.");
+                    game.awardArmies();
+                    console.append(game.getCurrentPlayer().getName() + ", reinforce your territories!");
                 }
                 else {
                     console.append("Entered number is too large, try again.");

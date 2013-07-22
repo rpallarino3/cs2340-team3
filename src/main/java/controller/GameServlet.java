@@ -184,7 +184,7 @@ public class GameServlet extends HttpServlet {
             int numArmiesToAdd = game.getNumArmiesToAdd();
             try {
                 numArmiesToAdd = Integer.parseInt(userInput);
-                if (numArmiesToAdd < game.getFortifyingTerritory().getNumArmies() && numArmiesToAdd > 0) {
+                if (numArmiesToAdd < game.getFortifyingTerritory().getNumArmies() && numArmiesToAdd => 0) {
                     game.getTerritoryToFortify().changeNumArmies(numArmiesToAdd);
                     game.getFortifyingTerritory().changeNumArmies(-numArmiesToAdd);
                     game.nextTurn();
@@ -193,7 +193,7 @@ public class GameServlet extends HttpServlet {
                     console.append(game.getCurrentPlayer().getName() + ", reinforce your territories!");
                 }
                 else {
-                    console.append("Entered number is too large, try again.");
+                    console.append("Entered number is too large or small, try again.");
                 }
             }
             catch (NumberFormatException e) {

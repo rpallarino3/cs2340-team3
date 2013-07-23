@@ -15,6 +15,7 @@ import etc.RiskStatus;
  */
 public class Game {
   
+  private ArrayList<Territory> allTerritories;
   private ArrayList<Player> players;
   private RiskMapNetwork mapNetwork;
   private ArrayList<Territory> asia;
@@ -80,9 +81,30 @@ public class Game {
 	  europe = mapNetwork.getEurope();
 	  africa = mapNetwork.getAfrica();
 	  console=new RiskStatus();
+      allTerritories = combineTerritoriesArrays();
 	  
   }
   
+    private ArrayList<Territory> combineTerritoriesArrays() {
+        ArrayList<Territory> hugeTerriArray = new ArrayList<Territory>();
+        for(Territory t : asia)
+            hugeTerriArray.add(t);
+        for(Territory t : northAmerica)
+            hugeTerriArray.add(t);
+        for(Territory t : southAmerica)
+            hugeTerriArray.add(t);
+        for(Territory t : australia)
+            hugeTerriArray.add(t);
+        for(Territory t : europe)
+            hugeTerriArray.add(t);
+        for(Territory t : africa)
+            hugeTerriArray.add(t);
+        return hugeTerriArray;
+    }
+
+    public ArrayList<Territory> getTerritoriesAsArrayList() {
+        return allTerritories;
+    }
     
     private void setTurnOrder() {
     	Random rand= new Random();

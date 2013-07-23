@@ -60,6 +60,9 @@
     <copy  todir="${catalina.home}/webapps/${app.name}">
       <fileset dir="${build.home}"/>
     </copy>    
+    <copy todir="${catalina.home}/webapps/${app.name}/WEB-INF/lib">
+        <fileset dir="${lib.home}"/>
+    </copy>
   </target>
 
 </project>

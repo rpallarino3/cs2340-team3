@@ -6,6 +6,7 @@ public class RiskStatus {
     public static int DEF_MAX_SIZE=100;
     private LinkedList<Object> status;
     private LinkedList<Long> addTime;
+    private StringBuilder recentRaws; //reset whenever getRecentRaws or toString methods are called
     private long printTime = 0l;
     private int size = 0;
     private int maxSize;
@@ -20,6 +21,7 @@ public class RiskStatus {
         this.maxSize = maxSize;
         status = new LinkedList<Object>();
         addTime = new LinkedList<Long>();
+        recentRaws = new StringBuilder();
     }
     
     public void wrapOld(String openTag, String closeTag) {
@@ -43,6 +45,7 @@ public class RiskStatus {
         }
         status.addFirst(str);
         addTime.addFirst(System.nanoTime());
+        recentRaws.append(str.toString()).append('\n');
     }
     
     public int size() {
@@ -51,6 +54,13 @@ public class RiskStatus {
 
     public void clear() {
         status.clear();
+        addTime.clear();
+    }
+
+    public String getRecentRaws() {
+        String ret = recentRaws.toString();
+        recentRaws.setLength(0);
+        return ret;
     }
 
     /**
@@ -85,6 +95,7 @@ public class RiskStatus {
      */
     private String wrap(String front, String back) {
         StringBuilder sb = new StringBuilder();
+        recentRaws.setLength(0);
         for(int i=0; i < status.size(); i++) {
             if(addTime.get(i) > printTime) { //wrap new
                 sb.append(front).append(newOpenTag).append(status.get(i).toString()).append(newCloseTag).append(back);
